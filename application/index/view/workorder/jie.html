@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+   <style type="text/css">
+     .layui-form-select dl{
+      max-height:100px;
+     }
+   </style>
+   <link rel="stylesheet" href="/backend/css/zTreeStyle.css">
+</head>
+<body class="layui-layout-body">
+<form class="layui-form" action="" method="post" id="custmers1">
+  <input type="hidden" name="pid" value="{$a.oid}">
+  <div class="layui-form-item">
+     <div class="layui-inline">
+      <label class="layui-form-label">任务内容</label>
+      <div class="layui-input-inline">
+        <textarea placeholder="请输入内容" name="content" class="layui-textarea" readonly="" value="{$a.content}">{$a.content}</textarea>
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">下发时间</label>
+      <div class="layui-input-inline">
+        <input type="text" readonly value="{$a.ctime|date='Y-m-d H:i:s',###}" class="layui-input">
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">结束时间</label>
+      <div class="layui-input-inline">
+        <input type="text" readonly value="{$a.stime|date='Y-m-d H:i:s',###}" class="layui-input">
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">接收时间</label>
+      <div class="layui-input-inline">
+        {if $a.retime}
+        <input type="text" readonly value="{$a.retime|date='Y-m-d H:i:s',###}" class="layui-input">
+        {else/}
+        <input type="text" readonly value="--" class="layui-input">
+        {/if}
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">完成时间</label>
+      <div class="layui-input-inline">
+        {if $a.ftime}
+        <input type="text" readonly value="{$a.ftime|date='Y-m-d H:i:s',###}" class="layui-input">
+        {else/}
+        <input type="text" readonly value="--" class="layui-input">
+        {/if}
+      </div>
+    </div>
+  </div>
+  <button class="layui-btn" lay-submit="" id="searchBtn"  lay-filter="tranCustomer" data-type="getInfo" style="margin-left:120px;">接收任务</button>
+  </form>
+<script type="text/javascript" src="/backend/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="/backend/js/jquery.ztree.excheck.min.js"></script>
+  <script type="text/javascript">
+layui.use('form', function(){
+  var form = layui.form;
+  form.on('submit(tranCustomer)', function(data){
+  $.ajax({
+        url:"/index/Workorder/dojie",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+                 parent.location.reload();
+           });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+  });
+  return false;
+});
+});
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  //日期
+  laydate.render({
+    elem: '#date',
+    type:'datetime'
+  });
+});
+</script>
+ </body>
+ </html>

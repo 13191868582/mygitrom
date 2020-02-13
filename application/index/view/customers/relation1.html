@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+   <style type="text/css">
+     .layui-form-select dl{
+      max-height:100px;
+     }
+   </style>
+   <link rel="stylesheet" href="/backend/css/zTreeStyle.css">
+</head>
+<body class="layui-layout-body">
+<table class="layui-table" lay-size="sm">
+<thead>
+<tr>
+<th>所属员工</th>
+<th>分配时间</th>
+<th>更新时间</th>
+<th>状态</th>
+</tr>
+</thead>
+{volist name="data" id="relation"}
+<tr>
+    <td>{$relation.username}</td>
+    <td>{$relation.addtime}</td>
+    <td>{$relation.updatetime}</td>
+    <td><button type="button" class="layui-btn layui-btn-xs">{$relation.status}</button></td>
+</tr>
+{/volist}
+</table>
+{if $Think.session.user.rank eq 5 || $Think.session.user.rank eq 14}
+{else/}
+<form class="layui-form" action="{:url('Customers/tranCustomer')}" method="post" id="custmers1">
+  <div class="layui-form-item">
+     <div class="layui-inline">
+      <div class="layui-input-inline">
+        <input type="hidden" name="cid" value="{$cid}">
+        <select name="user">
+        {volist name="userlist" id="user"}
+          <option value="{$user.id}">{$user.username}</option>
+        {/volist}
+        </select>
+      </div>
+    </div>
+  </div> 
+   <button class="layui-btn" lay-submit="" id="searchBtn"  lay-filter="tranCustomer" data-type="getInfo" style="margin-left:120px;">转移客户</button>
+  </form>
+  {/if}
+<script type="text/javascript" src="/backend/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="/backend/js/jquery.ztree.excheck.min.js"></script>
+  <script type="text/javascript">
+layui.use('form', function(){
+  var form = layui.form;
+    form.on('submit(tranCustomer)', function(data){
+    //layer.msg(JSON.stringify(data.field));
+   $.ajax({
+        url:"/index/Customers/tranCustomer",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+                 parent.location.reload();
+    });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+});
+  return false;
+});
+});
+</script>
+ </body>
+ </html>

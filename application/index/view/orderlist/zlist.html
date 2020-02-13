@@ -1,0 +1,89 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>业绩撞单列表</legend>
+        </fieldset>
+        <form action="{:url('Orderlist/zlist')}" method="get" id="" class="layui-form" style="margin-bottom: 10px">
+            <label class="layui-form-label" style="font-size: 18px">撞单查询</label>
+            <div class="layui-input-inline">
+                <input style="width: 300px;" type="text"  value="{$search}" name="search" placeholder="请输入订单号或公司名称或阿里ID" autocomplete="off" class="layui-input">
+            </div>
+            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">搜索</i></button>
+            <a href="/index/orderlist/list.html" class="layui-btn" ><i class="layui-icon" >重置</i></a>
+
+        </form>
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>合同编号</th>
+                    <th>阿里用户名</th>
+                    <th>公司名称</th>
+                    <th>佣金基数</th>
+                    <th>销售人员姓名</th>
+                    <th>所属分公司</th>
+                    <th>认领人姓名</th>
+                    <th>所属业绩月</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {volist name="data" id="list"}
+                <tr>
+                    <td>{$list.contract}</td>
+                    <td>{$list.login_id}</td>
+                    <td>{$list.customer_name}</td>
+                    <td>{$list.commission_base}</td>
+                    <td>{$list.sale_name}</td>
+                    <td>{$list.sale_name|branchname}</td>
+                    <td>{$list['username']}</td>
+                    <td>{$list['permonth']|date='Y-m',###}</td>
+                    <td> {if $list['status']==0}
+                        <font color="red">未确认</font>
+                        {elseif $list['status']==1/}
+                        <font color="green">员工认领</font>
+                        {/if}
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <img alt="" style="display:none" id="displayimg" src="" />
+        </body>
+    </div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/heightchats/highcharts.js"></script>
+<script src="/static/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    function adopt(id,name){
+        layer.confirm("<span style=\"color:red;\">请确认此订单业绩为您的业绩！！！</span>", { title: "业绩确认"+"-"+name }, function () {
+            layui.use('form', function(){
+                var form = layui.form;
+                layer.open({
+                    title:'分发月份',
+                    type: 2,
+                    area: ['30%', '50%'],
+                    shadeClose: false, //点击遮罩关闭
+                    content:"{:url('Orderlist/distribute')}?id="+id
+                });
+
+            });
+        });
+    }
+</script>
+
+{include file="public/footer"/}

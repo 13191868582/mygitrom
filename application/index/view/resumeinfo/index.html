@@ -1,0 +1,136 @@
+{include file="public/header"/}
+<div class="layui-body">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>简历管理</legend>
+    </fieldset>
+    <div class="layui-form">
+        {if condition="$type == 1"}
+        <form class="layui-form" action="{:url('index/resumeinfo/index')}" style="display: unset;">
+            <div class="layui-inline">
+                <label class="layui-form-label">选择城市</label>
+                <div class="layui-input-inline">
+                    <select name="branch" lay-search=""  lay-filter="college">
+                        <option value="">选择城市</option>
+                        {volist name="branch" id="list"}
+                        <option value="{$list['id']}" {if condition="$result == $list['id']"}selected{/if}>{$list['name']}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">按时间查找</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="start" {if condition="!empty($and)"}value="{$and}"{/if} id="start" lay-verify="start" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" name="end" {if condition="!empty($end)"}value="{$end}"{/if} id="end" lay-verify="end" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+        </form>
+        {/if}
+    </div>
+
+
+    <div class="layui-form">
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col width="150">
+                <col width="100">
+                <col width="300">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>电话量</th>
+                <th>面试量</th>
+                <th>邀约-面试转化率(面试人数/已接通电话量)</th>
+                <th>面试-入职转化率(入职人数/面试人数)</th>
+                <th>离职率</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach name="res" item="list"}
+            <tr>
+                <td>{$list['username']}</td>
+                <td>{$list['phone']}</td>
+                <td>{$list['resumre']}</td>
+                <td>
+                    {if condition="$list['answer'] == 0"}
+                    0%
+                    {else /}
+                    {$list['resumre']/$list['answer'] *100|round=###,2}%
+                    {/if}
+                </td>
+                <td>
+                    {if condition="$list['resumre'] == 0"}
+                    0%
+                    {else /}
+                    {$list['entry']/$list['resumre'] *100|round=###,2}%
+                    {/if}</td>
+                <td>
+                    {if condition="$list['ruzhi'] == 0"}
+                    0%
+                    {else /}
+                    {$list['lizhi']/$list['ruzhi'] *100|round=###,2}%
+                    {/if}
+                </td>
+            </tr>
+
+            {/foreach}
+            <tr>
+                <td>合计</td>
+                <td>{$phonenum}</td>
+                <td>{$resumrenum}</td>
+                <td>
+                    {if condition="$answernum == 0"}
+                    0%
+                    {else /}
+                    {$resumrenum/$answernum *100|round=###,2}%
+                    {/if}
+                    
+                </td>
+                <td>
+                    {if condition="$resumrenum == 0"}
+                    0%
+                    {else /}
+                    {$entrynum/$resumrenum *100|round=###,2}%
+                    {/if}
+                </td>
+                <td>
+                    {if condition="$ruzhinum == 0"}
+                    0%
+                    {else /}
+                    {$lizhinum/$ruzhinum *100|round=###,2}%
+                    {/if}
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        
+
+
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#start',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#end',
+            // value:new Date()
+        });
+    });
+</script>
+
+
+{include file="public/footer"/}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+   <style type="text/css">
+     .layui-form-select dl{
+      max-height:100px;
+     }
+   </style>
+</head>
+<body>
+<form class="layui-form" action="" method="post" id="custmers1">
+  <input type="hidden" name="pid" value="{$id}">
+  <div class="layui-form-item">
+     <div class="layui-inline">
+      <div class="layui-input-inline">
+       <label class="layui-form-label">业绩月份</label>
+          <input type="hidden" value="{$strtime}" id="strtime">
+        <div class="layui-input-inline">
+          <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+    </div>
+  </div> 
+   <button class="layui-btn" lay-submit="" id="searchBtn"  lay-filter="tranCustomer" data-type="getInfo" style="margin-left:120px;">确认</button>
+  </form>
+  <script type="text/javascript">
+  layui.use(['form','laydate'],function(){
+      var time=$("#strtime").val();
+      var time1=time.slice(0,7)
+  var laydate = layui.laydate;
+  laydate.render({
+    elem: '#date',
+      min:time,
+      value:time1,
+    type:'month',
+
+  });
+  var form = layui.form;
+    form.on('submit(tranCustomer)', function(data){
+    //layer.msg(JSON.stringify(data.field));
+   $.ajax({
+        url:"/index/Orderlist/fenfa",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+            // console.log(data);
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+                 parent.location.reload();
+           });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+});
+  return false;
+});
+});
+</script>
+ </body>
+ </html>

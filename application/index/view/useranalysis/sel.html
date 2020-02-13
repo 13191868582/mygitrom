@@ -1,0 +1,309 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>用户体质分析看板</legend>
+    </fieldset>
+	<form class="layui-form" action="{:url('Useranalysis/sel')}" method="get">
+		<div class="layui-inline">
+	      <div class="layui-input-inline">
+	        <select name="industry1" id="industry1"  lay-filter="industry1">
+	          <option value="0">选择公司</option>
+	          {volist name="company" id="list"}
+	          <option {if condition="$data['industry1'] == $list.id"}selected{/if} value="{$list.id}">{$list.name}</option>
+	          {/volist}
+	        </select>
+	      </div>
+	       <div class="layui-input-inline">
+	      <select name="industry2" id="industry2" lay-filter="industry2">
+	        <option value="">请选择员工</option>
+	      </select>
+	    </div>
+	    </div>
+
+
+
+     	<div class="layui-form-item">
+    		<label class="layui-form-label">客户信息</label>
+    		<div class="layui-input-block">
+      			<input type="checkbox"  {if condition="!empty($data['aliname'])"}checked{/if} name="aliname" value="aliname" title="阿里用户名">
+      			<input type="checkbox"  {if condition="!empty($data['a_level'])"}checked{/if} name="a_level" value="a_level" title="A等级">
+      			<input type="checkbox"  {if condition="!empty($data['products'])"}checked{/if} name="products" value="products" title="主营产品">
+      			<input type="checkbox"  {if condition="!empty($data['hangye'])"}checked{/if} name="hangye" value="hangye" title="行业分类">
+      			<input type="checkbox"  {if condition="!empty($data['ali_app'])"}checked{/if} name="ali_app" value="ali_app" title="阿里APP">
+      			<input type="checkbox"  {if condition="!empty($data['wp_score'])"}checked{/if} name="wp_score" value="wp_score" title="旺铺评分">
+      			<input type="checkbox"  {if condition="!empty($data['violation_record'])"}checked{/if} name="violation_record" value="violation_record" title="违规记录">
+      			<input type="checkbox"  {if condition="!empty($data['five_offer'])"}checked{/if} name="five_offer" value="five_offer" title="五星offer">
+      			<input type="checkbox"  {if condition="!empty($data['seven_offer'])"}checked{/if} name="seven_offer" value="seven_offer" title="七星offer">
+      			<input type="checkbox"  {if condition="!empty($data['strength_businessmen'])"}checked{/if} name="strength_businessmen" value="strength_businessmen" title="是否实商">
+				<input type="checkbox"  {if condition="!empty($data['p4p'])"}checked{/if} name="p4p" value="p4p" title="P4P">
+				<input type="checkbox"  {if condition="!empty($data['p4p_consume'])"}checked{/if} name="p4p_consume" value="p4p_consume" title="30天P4P消耗">
+				<input type="checkbox"  {if condition="!empty($data['buy_insurance'])"}checked{/if} name="buy_insurance" value="buy_insurance" title="是否开通买宝">
+				<input type="checkbox"  {if condition="!empty($data['current_level'])"}checked{/if} name="current_level" value="current_level" title="当前层级">
+				<input type="checkbox"  {if condition="!empty($data['shop_status'])"}checked{/if} name="shop_status" value="shop_status" title="店铺托管">
+				<input type="checkbox"  {if condition="!empty($data['auto_activities'])"}checked{/if} name="auto_activities" value="auto_activities" title="参与网店活动">
+				<input type="checkbox"  {if condition="!empty($data['c_type'])"}checked{/if} name="c_type" value="c_type" title="是否过期">
+     		</div>
+  		</div>
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">其他信息</label>
+    		<div class="layui-input-block">
+    			<input type="checkbox"  {if condition="!empty($data['corporate_name'])"}checked{/if} name="corporate_name" value="corporate_name" title="公司名称">
+    			<input type="checkbox"  {if condition="!empty($data['company_address'])"}checked{/if} name="company_address" value="company_address" title="公司地址">
+    			<input type="checkbox"  {if condition="!empty($data['company_personnel'])"}checked{/if} name="company_personnel" value="company_personnel" title="员工数量">
+    			<input type="checkbox"  {if condition="!empty($data['importance'])"}checked{/if} name="importance" value="importance" title="电商重视程度">
+    			<input type="checkbox"   name="22" value="123" title="月营业额">
+    			<input type="checkbox"  {if condition="!empty($data['annual_profit'])"}checked{/if} name="annual_profit" value="annual_profit" title="年营业额">
+    			<input type="checkbox"  {if condition="!empty($data['y_turnover'])"}checked{/if} name="y_turnover" value="y_turnover" title="上年营业额">
+    			<input type="checkbox"  {if condition="!empty($data['public_number'])"}checked{/if} name="public_number" value="public_number" title="公众号">
+    			<input type="checkbox"  {if condition="!empty($data['integrity_level'])"}checked{/if} name="integrity_level" value="integrity_level" title="企业诚信等级">
+    			<input type="checkbox"  {if condition="!empty($data['old_signsale'])"}checked{/if} name="old_signsale" value="old_signsale" title="原签单销售">
+    			<input type="checkbox"  {if condition="!empty($data['old_p4p'])"}checked{/if} name="old_p4p" value="old_p4p" title="原P4P">
+    			<input type="checkbox"  {if condition="!empty($data['old_p4pconsume'])"}checked{/if} name="old_p4pconsume" value="old_p4pconsume" title="原P4P消耗客服">
+    			<input type="checkbox"  {if condition="!empty($data['tp_date'])"}checked{/if} name="tp_date" value="tp_date" title="TP年限">
+    			<input type="checkbox"   name="31" value="456" title="客户所属分公司">
+    			<input type="checkbox"   name="32" value="789" title="客户所属客服人">
+    		</div>
+  		</div>
+
+  		<button class="layui-btn" lay-submit="" id="searchBtn" data-type="getInfo">搜索</button>
+	</form>
+
+<div class="layui-form">
+	<table class="layui-table" id="tab">
+		<thead>
+			<tr>
+				<td><input type="checkbox" name=""></td>
+				{if condition="!empty($data['aliname'])"}
+				<td>阿里用户名</td>
+				{/if}
+				{if condition="!empty($data['a_level'])"}
+				<td>A等级</td>
+				{/if}
+				{if condition="!empty($data['products'])"}
+				<td>行业分类</td>
+				{/if}
+				{if condition="!empty($data['ali_app'])"}
+				<td>阿里APP</td>
+				{/if}
+
+				{if condition="!empty($data['wp_score'])"}
+				<td>旺铺评分</td>
+				{/if}
+
+				{if condition="!empty($data['violation_record'])"}
+				<td>违规记录</td>
+				{/if}
+				{if condition="!empty($data['five_offer'])"}
+				<td>五星offer</td>
+				{/if}
+				{if condition="!empty($data['seven_offer'])"}
+				<td>七星offer</td>
+				{/if}
+				{if condition="!empty($data['strength_businessmen'])"}
+				<td>是否实商</td>
+				{/if}
+				{if condition="!empty($data['p4p'])"}
+				<td>p4p</td>
+				{/if}
+				{if condition="!empty($data['p4p_consume'])"}
+				<td>30天P4P消耗</td>
+				{/if}
+				
+				{if condition="!empty($data['buy_insurance'])"}
+				<td>是否开通买宝</td>
+				{/if}
+
+				{if condition="!empty($data['current_level'])"}
+				<td>当前层级</td>
+				{/if}
+				{if condition="!empty($data['shop_status'])"}
+				<td>店铺托管</td>
+				{/if}
+
+
+				{if condition="!empty($data['corporate_name'])"}
+				<td>公司名称</td>
+				{/if}
+				{if condition="!empty($data['company_address'])"}
+				<td>公司地址</td>
+				{/if}
+
+				{if condition="!empty($data['c_type'])"}
+				<td>是否过期</td>
+				{/if}
+				{if condition="!empty($data['company_personnel'])"}
+				<td>电商重视程度</td>
+				{/if}
+				{if condition="!empty($data['annual_profit'])"}
+				<td>年营业额</td>
+				{/if}
+				{if condition="!empty($data['public_number'])"}
+				<td>公众号</td>
+				{/if}
+				{if condition="!empty($data['integrity_level'])"}
+				<td>是否过期</td>
+				{/if}
+				{if condition="!empty($data['c_type'])"}
+				<td>企业诚信等级</td>
+				{/if}
+				{if condition="!empty($data['old_signsale'])"}
+				<td>原签单销售</td>
+				{/if}
+				{if condition="!empty($data['old_p4p'])"}
+				<td>原P4P</td>
+				{/if}
+				{if condition="!empty($data['old_p4pconsume'])"}
+				<td>原P4P消耗客服</td>
+				{/if}
+				{if condition="!empty($data['tp_date'])"}
+				<td>TP年限</td>
+				{/if}
+				
+
+
+			</tr>
+		</thead>
+        <tbody>
+			{volist name="page" id="list"}
+			<tr>
+				<td><input type="checkbox" name=""></td>
+				{if condition="!empty($data['aliname'])"}
+				<td>{$list.aliname}</td>
+				{/if}
+				{if condition="!empty($data['a_level'])"}
+				<td>{$list.a_level}</td>
+				{/if}
+				{if condition="!empty($data['products'])"}
+				<td>{$list.products}</td>
+				{/if}
+				{if condition="!empty($data['ali_app'])"}
+				<td>{$list.ali_app}</td>
+				{/if}
+
+				{if condition="!empty($data['wp_score'])"}
+				<td>{$list.wp_score}</td>
+				{/if}
+
+				{if condition="!empty($data['violation_record'])"}
+				<td>{$list.violation_record}</td>
+				{/if}
+				{if condition="!empty($data['five_offer'])"}
+				<td>{$list.five_offer}</td>
+				{/if}
+				{if condition="!empty($data['seven_offer'])"}
+				<td>{$list.seven_offer}</td>
+				{/if}
+				{if condition="!empty($data['strength_businessmen'])"}
+				<td>{$list.strength_businessmen}</td>
+				{/if}
+				{if condition="!empty($data['p4p'])"}
+				<td>{$list.p4p}</td>
+				{/if}
+				{if condition="!empty($data['p4p_consume'])"}
+				<td>{$list.p4p_consume}</td>
+				{/if}
+				{if condition="!empty($data['buy_insurance'])"}
+				<td>{$list.buy_insurance}</td>
+				{/if}
+				
+
+				{if condition="!empty($data['current_level'])"}
+				<td>{$list.current_level}</td>
+				{/if}
+				{if condition="!empty($data['shop_status'])"}
+				<td>{$list.shop_status}</td>
+				{/if}
+
+
+				{if condition="!empty($data['corporate_name'])"}
+				<td>{$list.corporate_name}</td>
+				{/if}
+				{if condition="!empty($data['company_address'])"}
+				<td>{$list.company_address}</td>
+				{/if}
+
+				{if condition="!empty($data['c_type'])"}
+				<td>{$list.c_type}</td>
+				{/if}
+				{if condition="!empty($data['company_personnel'])"}
+				<td>{$list.company_personnel}</td>
+				{/if}
+				{if condition="!empty($data['annual_profit'])"}
+				<td>{$list.annual_profit}</td>
+				{/if}
+				{if condition="!empty($data['public_number'])"}
+				<td>{$list.public_number}</td>
+				{/if}
+				{if condition="!empty($data['integrity_level'])"}
+				<td>{$list.integrity_level}</td>
+				{/if}
+				{if condition="!empty($data['c_type'])"}
+				<td>{$list.c_type}</td>
+				{/if}
+				{if condition="!empty($data['old_signsale'])"}
+				<td>{$list.old_signsale}</td>
+				{/if}
+				{if condition="!empty($data['old_p4p'])"}
+				<td>{$list.old_p4p}</td>
+				{/if}
+				{if condition="!empty($data['old_p4pconsume'])"}
+				<td>{$list.old_p4pconsume}</td>
+				{/if}
+				{if condition="!empty($data['tp_date'])"}
+				<td>{$list.tp_date}</td>
+				{/if}
+				
+
+
+			</tr>
+			{/volist}
+		</tbody>
+	</table>
+	{$page->render()}
+</div>
+<img alt="" style="display:none" id="displayimg" src="" />
+</div>
+
+<script type="text/javascript">
+    layui.use('form', function(){
+    var form = layui.form;
+      form.on('select(industry1)',function(data){
+                    var fid=data.value;
+                    console.log(fid);
+                    $.ajax({
+                        url: "{:url('Useranalysis/userLists')}",//请求地址
+                        type: "POST",//请求方式
+                        dataType: "JSON",//返回数据类型
+                        data: {fid:fid},//发送的参数
+                        success:function(data){
+                            var re=data.data;
+                            // console.log(data);
+                            $('#industry2 option').hide();
+                            var proHtml = '';
+                            proHtml += '<option value="0">请选择员工</option>';
+                            for(var i=0;i<data.data.length;i++){
+                              proHtml += '<option value="'+re[i].id+'">'+re[i].username+'</option>';
+                            }
+                            $('#industry2').html(proHtml);
+                            form.render();  
+
+                        },
+                        error:function(){
+                            //失败执行的方法
+                            alert("error");
+                        }
+                    })
+ 
+             })
+    })
+  </script>
+
+  
+
+{include file="public/footer"/}

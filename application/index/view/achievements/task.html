@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>银豆豆任务目标系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+<div>
+    <h1 style="text-align:center;margin-top: 10px">银豆豆任务目标系统</h1>
+    <table class="layui-table">
+        <thead>
+        <tr style="text-align:center;" >
+            <td colspan="3" rowspan="2"  >分公司名称</td>
+            <td colspan="2">新签(本月)</td>
+            <td colspan="2">新签(季度)</td>
+            <td colspan="2">续签(本月)</td>
+            <td colspan="2">续签(季度)</td>
+            <td colspan="2">网销宝(本月)</td>
+            <td colspan="2">网销宝(季度)</td>
+            <td colspan="2">代运营(本月)</td>
+            <td colspan="2">代运营(季度)</td>
+        </tr>
+        <tr style="text-align:center;">
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+            <td>到账</td>
+            <td>目标</td>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr style="text-align:center;">
+            <td colspan="3">{$vo.name}</td>
+            <td>{$vo.newover}</td>
+            <td>{$vo.new}</td>
+            <td>{$vo.mnewover}</td>
+            <td>{$vo.mnew}</td>
+            <td>{$vo.xuqianover}</td>
+            <td>{$vo.xuqian}</td>
+            <td>{$vo.mxuqianover}</td>
+            <td>{$vo.mxuqian}</td>
+            <td>{$vo.wangxiaobaoover}</td>
+            <td>{$vo.wangxiaobao}</td>
+            <td>{$vo.mwangxiaobaoover}</td>
+            <td>{$vo.mwangxiaobao}</td>
+            <td>{$vo.daiyunyingover}</td>
+            <td>{$vo.daiyunying}</td>
+            <td>{$vo.mdaiyunyingover}</td>
+            <td>{$vo.mdaiyunying}</td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>
+<script href="/static/layui/layui.js"></script>
+<script href="/static/jquery-3.3.1.min.js"></script>

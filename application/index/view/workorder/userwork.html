@@ -1,0 +1,195 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>工单列表</legend>
+        </fieldset>
+         <form class="layui-form" action="{:url('Workorder/userwork')}" method="get" id="custmers">
+            <div class="layui-form-item">
+                <label class="layui-form-label">任务状态</label>
+                <div class="layui-input-inline">
+                  <select name="per_dd_status" lay-filter="aihao" id="per_dd_status">
+                    <option value="">请选择</option>
+                    <option value="0">待下发</option>
+                    <option value="1">待接收</option>
+                    <option value="2">任务中</option>
+                    <option value="3">已完成</option>
+                  </select>
+                </div>
+                <button class="layui-btn" lay-submit="" id="searchBtn" onclick="submitf()" data-type="getInfo">搜索</button>
+            </div>
+        </form>
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>阿里订单号</th>
+                    <th>阿里用户名</th>
+                    <th>客户公司名称</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>任务状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="data" id="list"}
+                <tr>
+                    <td>{$list['per_aliorder']}</td>
+                    <td>{$list['per_aliname']}</td>
+                    <td>{$list['per_cname']}</td>
+                    {if empty($list['per_create_time'])}
+                    <td>--</td>
+                    <td>--</td>
+                    {else/}
+                    <td>{$list['per_create_time']|date="Y-m-d H:i:s",###}</td>
+                    <td>{$list['per_stop_time']|date="Y-m-d H:i:s",###}</td>
+                    {/if}
+                    {if $list['per_dd_status']==0}
+                    <td style="color:#FF0000;font-weight:bold;">待下发</td>
+                    {/if}
+                    {if $list['per_dd_status']==1}
+                    <td style="color:#33FF00;font-weight:bold;">待接收</td>
+                    {/if}
+                    {if $list['per_dd_status']==2}
+                    <td style="color:#2222DD;font-weight:bold;">任务中</td>
+                    {/if}
+                    {if $list['per_dd_status']==3}
+                    <td style="color: #EE1169;font-weight:bold;">美工已完成</td>
+                    {/if}
+                    {if $list['per_dd_status']==4}
+                    <td style="color: #EE1169;font-weight:bold;">确认完成</td>
+                    {/if}
+                    {if $list['per_dd_status']==0}
+                     <td><button type="button" class="layui-btn layui-btn-disabled layui-btn-xs">未分配</button>
+                    </td>
+                    {elseif $list['per_dd_status']==1 /}
+                    <td><a onclick="finish({$list['per_id']})"><button type="button" class="layui-btn layui-btn-normal layui-btn-xs">确认完成</button></a>
+                        <a onclick="cha({$list['per_id']})"><button type="button" class="layui-btn layui-btn-warm layui-btn-xs">查看任务</button></a>
+                    </td>
+                    {else/}
+                     <td><a onclick="cha({$list['per_id']})"><button type="button" class="layui-btn layui-btn-warm layui-btn-xs">查看任务</button></a>
+                    </td>
+                    {/if}
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            {$data->render()}
+        </div>
+        <img alt="" style="display:none" id="displayimg" src=""/>
+        </body></div>
+</div>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  //日期
+  laydate.render({
+    elem: '#start',
+    // value:new Date()
+  });
+ laydate.render({
+    elem: '#end',
+    // value:new Date()
+  });
+});
+function ding(id)
+{
+     $.ajax({
+            url:"{:url('Workorder/ding')}",
+            type:"POST",
+            dataType:"json",
+            data:{id:id},
+            success:function(data){
+                console.log(data);
+                if(data.code==200){
+                    layer.msg(data.msg,{icon:1,time:1600},function(){
+                        window.location.href='/index/goods/list';
+                    });
+                }else{
+                    layer.msg(data.msg,{icon:2,time:1600});
+                }
+            },
+            error:function(jqXHR){
+                layer.msg("发生错误："+ jqXHR.status);
+            }
+        });
+}
+function del(id)
+{
+     $.ajax({
+            url:"{:url('Workorder/ding')}",
+            type:"POST",
+            dataType:"json",
+            data:{id:id},
+            success:function(data){
+                console.log(data);
+                if(data.code==200){
+                    layer.msg(data.msg,{icon:1,time:1600},function(){
+                        window.location.href='/index/goods/list';
+                    });
+                }else{
+                    layer.msg(data.msg,{icon:2,time:1600});
+                }
+            },
+            error:function(jqXHR){
+                layer.msg("发生错误："+ jqXHR.status);
+            }
+        });
+}
+function finish(id)
+{
+     $.ajax({
+            url:"{:url('Workorder/finish')}",
+            type:"POST",
+            dataType:"json",
+            data:{id:id},
+            success:function(data){
+                if(data.code==200){
+                    layer.msg(data.msg,{icon:1,time:1600},function(){
+                        history.go(0);
+                    });
+                }else{
+                    layer.msg(data.msg,{icon:2,time:1600});
+                }
+            },
+            error:function(jqXHR){
+                layer.msg("发生错误："+ jqXHR.status);
+            }
+        });
+}
+
+function fenpei(id,dat)
+{
+    layer.open({
+            title:'分配任务',
+            type: 2,
+            area: ['30%', '70%'],
+            shadeClose: false, //点击遮罩关闭
+            maxmin: true,
+            content:"{:url('Workorder/work')}?id="+id+"&bid="+dat
+        });
+}
+function cha(id)
+{
+    layer.open({
+            title:'查看任务',
+            type: 2,
+            area: ['30%', '60%'],
+            shadeClose: false, //点击遮罩关闭
+            maxmin: true,
+            content:"{:url('Workorder/cha')}?id="+id
+        });
+}
+</script>
+{include file="public/footer"/}

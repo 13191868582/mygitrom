@@ -1,0 +1,216 @@
+{include file="public/header"/}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>系外业绩订单录入</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color: #ff1c1a">系外订单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_aliorder" lay-verify="required" lay-reqtext="" value="{$per_aliorder}" placeholder="请输入阿里订单号" autocomplete="off" class="layui-input "  disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color: #ff1c1a">阿里用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_aliname" lay-verify="required" lay-reqtext="" placeholder="请输入阿里用户名或系外名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">到单时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="per_daotime" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公司名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_cname"  lay-verify="required"  autocomplete="off" class="layui-input" placeholder="请输入公司名称">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年限</label>
+                <div class="layui-input-block">
+                    <input type="number" name="per_year"   onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'')" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入年限">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新续属性</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="per_sex" value="新签" title="新签" lay-verify="otherReq">
+                    <input type="radio" name="per_sex" value="续签" title="续签" lay-verify="otherReq"  >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">到单类型</label>
+                <div class="layui-input-block">
+                    <!--<input type="checkbox" name="per_type[1]" value="1" title="诚信通"  lay-filter="per_type" >-->
+                    <input type="checkbox" name="per_type[3]" value="3" title="建站服务包" lay-filter="per_type"  >
+                    <input type="checkbox" name="per_type[4]" value="4" title="运营包" lay-filter="per_type">
+                    <input type="checkbox" name="per_type[5]" value="5" title="大泽ERP" lay-filter="per_type">
+                </div>
+            </div>
+            <div class="layui-form-item" id="mmp">
+            </div>
+            <div class="layui-form-item" id="mmp1">
+            </div>
+            <div class="layui-form-item" id="mmp4">
+            </div>
+            <div class="layui-form-item" id="mmp5">
+            </div>
+            <div class="layui-form-item" id="mmp6">
+            </div>
+            <div class="layui-form-item" id="mmp7">
+            </div>
+            <div class="layui-form-item" id="mmp2">
+            </div>
+            <div class="layui-form-item" id="mmp3">
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="de">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#date',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#date1',
+            // value:new Date()
+        });
+    });
+</script>
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('checkbox(per_type)',function(data){
+            var status=data.elem.checked;
+            console.log(status);
+            var fid=data.value;
+            console.log(fid)
+            var proHtml = '';
+            var proHtml1 = '';
+            if(status==true&&fid==1){
+                proHtml +='<label class="layui-form-label" style="color:#ff1c1a">诚信通应收金额</label>\n' +
+                    ' <div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amount[1]" lay-verify="required" autocomplete="off" placeholder="请输入金额" class="layui-input">\n' +
+                    '</div>'
+                proHtml1 +='<label class="layui-form-label" style="color:#ff1c1a">诚信通实收金额</label>\n' +
+                    '<div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amounted[1]" lay-verify="required" autocomplete="off" placeholder="请输入金额" class="layui-input">\n' +
+                    '</div>'
+                $('#mmp').html(proHtml);
+                $('#mmp1').html(proHtml1);
+            }else if(status==false&&fid==1){
+                $('#mmp').empty();
+                $('#mmp1').empty();
+            }else if(status==true&&fid==5){
+                proHtml +='<label class="layui-form-label" style="color:#ff1c1a">大泽ERP应收金额</label>\n' +
+                    ' <div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amount[5]" lay-verify="required" autocomplete="off" placeholder="请输入应收金额" class="layui-input">\n' +
+                    '</div>'
+                proHtml1 +='<label class="layui-form-label" style="color:#ff1c1a">大泽ERP实收金额</label>\n' +
+                    '<div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amounted[5]" lay-verify="required" autocomplete="off" placeholder="请输入实收金额" class="layui-input">\n' +
+                    '</div>'
+                $('#mmp2').html(proHtml);
+                $('#mmp3').html(proHtml1);
+            }else if(status==false&&fid==5){
+                $('#mmp2').empty();
+                $('#mmp3').empty();
+            }else if(status==true&&fid==3){
+                proHtml +='<label class="layui-form-label"  style="color:#ff1c1a">服务包应收金额</label>\n' +
+                    ' <div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amount[3]" lay-verify="required" autocomplete="off" placeholder="请输入应收金额" class="layui-input">\n' +
+                    '</div>'
+                proHtml1 +='<label class="layui-form-label" style="color:#ff1c1a">服务包收金额</label>\n' +
+                    '<div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amounted[3]" lay-verify="required" autocomplete="off" placeholder="请输入实收金额" class="layui-input">\n' +
+                    '</div>'
+                $('#mmp4').html(proHtml);
+                $('#mmp5').html(proHtml1);
+            }else if(status==false&&fid==3){
+                $('#mmp4').empty();
+                $('#mmp5').empty();
+            }else if(status==true&&fid==4){
+                proHtml +='<label class="layui-form-label" style="color:#ff1c1a">运营包应收金额</label>\n' +
+                    ' <div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amount[4]" lay-verify="required" autocomplete="off" placeholder="请输入应收金额" class="layui-input">\n' +
+                    '</div>'
+                proHtml1 +='<label class="layui-form-label" style="color:#ff1c1a">运营包收金额</label>\n' +
+                    '<div class="layui-input-block">\n' +
+                    '<input type="text" name="per_amounted[4]" lay-verify="required" autocomplete="off" placeholder="请输入实收金额" class="layui-input">\n' +
+                    '</div>'
+                $('#mmp6').html(proHtml);
+                $('#mmp7').html(proHtml1);
+            }else if(status==false&&fid==4){
+                $('#mmp6').empty();
+                $('#mmp7').empty();
+            }
+            form.render();
+        })
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+        form.verify({
+            otherReq: function(value,item){
+                var $ = layui.$;
+                var verifyName=$(item).attr('name')
+                    , verifyType=$(item).attr('type')
+                    ,formElem=$(item).parents('.layui-form')//获取当前所在的form元素，如果存在的话
+                    ,verifyElem=formElem.find('input[name='+verifyName+']')//获取需要校验的元素
+                    ,isTrue= verifyElem.is(':checked')//是否命中校验
+                    ,focusElem = verifyElem.next().find('i.layui-icon');//焦点元素
+                if(!isTrue || !value){
+                    //定位焦点
+                    focusElem.css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+                    //对非输入框设置焦点
+                    focusElem.first().attr("tabIndex","1").css("outline","0").blur(function() {
+                        focusElem.css(verifyType=='radio'?{"color":""}:{"border-color":""});
+                    }).focus();
+                    return '所有必填项不能为空';
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(de)', function(data){
+            $.ajax({
+                url:"{:url('Achievements/add')}",
+                type:"POST",
+                dataType:"json",
+                data:data.field,
+                success:function(data){
+                    if(data.code==200){
+                        layer.msg("提交成功！",{icon:1,time:1600},function(){
+                            window.location.href="{:url('Achievements/perlists')}";
+                        });
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:1600});
+                    }
+                },
+                error:function(jqXHR){
+                    layer.msg("发生错误："+ jqXHR.status);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{include file="public/footer"/}

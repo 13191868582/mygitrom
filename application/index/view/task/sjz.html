@@ -1,0 +1,123 @@
+<div>
+    <div class="layui-col-xs6">
+        <div class="layui-card" style="margin-bottom: 0px;">
+            <div class="layui-card-header">新签销售数据统计</div>
+            <div class="layui-card-body">
+                <div id="container"></div>
+                <div id="line1"></div>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header">续签客服数据统计</div>
+            <div class="layui-card-body">
+                <div id="huan"></div>
+                <div id="line"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs6">
+        <div class="layui-card" style="margin-bottom: 0px ">
+            <div class="layui-card-header header1">
+                <div style="display: flex;background: #09153D">
+                    <div style="margin-top:16px;">河北银豆豆营销数据检测平台</div>
+                    <div style="font-size:12px;">
+                        <div id="time" style="color:#3781F9;"></div>
+                        <div style="color:#3781F9">更新时间{:date('Y-m-d H:i:s',$data['ntime']['time'])}</div>
+                    </div>
+                </div>
+                <div style="display: flex;justify-content : space-between;background: #09153D">
+                    <div class="tongji" style="display: flex;">
+                        <image src="/static/image/icon.png"><div style="font-size:14px;">大数据统计</div>
+                    </div>
+                    <div style="margin-left:2%;width:40%;border-bottom: 2px solid #3781F9;font-size:12px;color:#fff">{$data['city']}全部数据</div>
+                    <!--  <div style="font-weight:bold;font-size: 15px">/////&nbsp;
+                         &nbsp;<span style="color: #fff">全网数据</span>&nbsp;&nbsp;/////</div> -->
+                </div>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header" style="text-align:center;margin-top: 60px;">代运营销售业绩</div>
+            <div class="layui-card-body">
+                <div class="layui-col-xs6">
+                    <div class="layui-card">
+                        <div class="layui-card-body" >
+                            <div id="zhu"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs6" style="background:#09153D;height: 300px;">
+                    <div class="layui-card" style="background:#09153D;">
+                        <div class="layui-card-body" >
+                            <div class="layui-card-header f">本月数据统计:</div>
+                            <div class="layui-col-xs6 e">
+                                <div class="layui-card">
+                                    <div class="layui-card-body a" >
+                                        {$data.daito}
+                                    </div>
+                                    <div class="layui-card-header b">本月目标(万元)</div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs6 e">
+                                <div class="layui-card">
+                                    <div class="layui-card-body a" >
+                                        {$data.dai}
+                                    </div>
+                                    <div class="layui-card-header b">本月到单(万元)</div>
+                                </div>
+                            </div>
+                            <div class="layui-card-header f" style="margin-top:45%;">本季数据统计:</div>
+                            <div class="layui-col-xs6 e">
+                                <div class="layui-card">
+                                    <div class="layui-card-body a" >
+                                        {$data.daijito}
+                                    </div>
+                                    <div class="layui-card-header b">本月目标(万元)</div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs6 e">
+                                <div class="layui-card">
+                                    <div class="layui-card-body a" >
+                                        {$data.daiji}
+                                    </div>
+                                    <div class="layui-card-header b">本月到单(万元)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header" style="margin-top:57%;">网销宝销售订单</div>
+            <div class="layui-card-body">
+                <div class="layui-col-xs5" >
+                    <div class="layui-card" style="background:#09153D">
+                        <div class="layui-card-body" style="height: 190px;display: flex;">
+                            <div class="dd" style="color:#EA1D5E;font-size:12px;">{$data.mp4p}单<p style="color:#4381E6;">本月到单</p></div>
+                            <div class="dd" style="color:#FFD238;font-size:12px">{$data.mp4pto}单<p style="color: #4381E6;">本月目标</p></div>
+                        </div>
+                        <div class="layui-card-body" style="height: 190px;display: flex;">
+                            <div class="dd" style="color:#1FFF90;font-size:12px">{$data.sp4p}单<p style="color: #4381E6;">本季度到单</p></div>
+                            <div class="dd" style="color:#CF00ED;font-size:12px">{$data.sp4pto}单<p style="color: #4381E6;">本季度目标</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs7">
+                    <div class="layui-card">
+                        <div class="layui-card-body" >
+                            <div id="zhu2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    chart1({$data['newdayover']},{$data['newmonthover']},{$data['newseasonover']},{$data['newseasonto']});
+    line1({$data['newyear'][0]},{$data['newyear'][1]},{$data['newyear'][2]},{$data['newyear'][3]},{$data['newyear'][4]},{$data['newyear'][5]},{$data['newyear'][6]},{$data['newyear'][7]},{$data['newyear'][8]},{$data['newyear'][9]},{$data['newyear'][10]},{$data['newyear'][11]});
+    line({$data['xulv'][0]},{$data['xulv'][1]},{$data['xulv'][2]},{$data['xulv'][3]},{$data['xulv'][4]},{$data['xulv'][5]},{$data['xulv'][6]},{$data['xulv'][7]},{$data['xulv'][8]},{$data['xulv'][9]},{$data['xulv'][10]},{$data['xulv'][11]});
+    huan({$data['xm']},{$data['xm1']},{$data['xm2']},{$data['xm3']});
+    zhu({$data['yy']},{$data['daiz'][0]},{$data['daiz'][1]},{$data['daiz'][2]},{$data['daiz'][3]},{$data['daiz'][4]},{$data['daiz'][5]});
+    zhu2({$data['dnp4p']},{$data['dxp4p']},{$data['mp4p']},{$data['mxp4p']});
+</script>

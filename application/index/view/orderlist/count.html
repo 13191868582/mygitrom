@@ -1,0 +1,191 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+{load href="/static/code/highcharts.js"/}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div id="container" style="min-width:400px;height:400px"></div>
+    <script type="text/javascript">
+    var bl_1={$bl_1[1]};
+    var chart = Highcharts.chart('container',{
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '续签率一览表'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        categories: [
+            '石家庄<br>首年:'+{$data1_3[1]}+'/'+{$data1_2[1]}+'<br>二年'+{$data2_3[1]}+'/'+{$data2_2[1]}+'<br>多年'+{$data3_3[1]}+'/'+{$data3_2[1]}+'<br>综合'+{$data5_3[1]}+'/'+{$data5_2[1]},
+            '邯郸<br>首年:'+{$data1_3[2]}+'/'+{$data1_2[2]}+'<br>二年'+{$data2_3[2]}+'/'+{$data2_2[2]}+'<br>多年'+{$data3_3[2]}+'/'+{$data3_2[2]}+'<br>综合'+{$data5_3[2]}+'/'+{$data5_2[2]},
+            '衡水<br>首年:'+{$data1_3[3]}+'/'+{$data1_2[3]}+'<br>二年'+{$data2_3[3]}+'/'+{$data2_2[3]}+'<br>多年'+{$data3_3[3]}+'/'+{$data3_2[3]}+'<br>综合'+{$data5_3[3]}+'/'+{$data5_2[3]},
+            '沧州<br>首年:'+{$data1_3[4]}+'/'+{$data1_2[4]}+'<br>二年'+{$data2_3[4]}+'/'+{$data2_2[4]}+'<br>多年'+{$data3_3[4]}+'/'+{$data3_2[4]}+'<br>综合'+{$data5_3[4]}+'/'+{$data5_2[4]},
+            '廊坊<br>首年:'+{$data1_3[5]}+'/'+{$data1_2[5]}+'<br>二年'+{$data2_3[5]}+'/'+{$data2_2[5]}+'<br>多年'+{$data3_3[5]}+'/'+{$data3_2[5]}+'<br>综合'+{$data5_3[5]}+'/'+{$data5_2[5]},
+            '保定<br>首年:'+{$data1_3[6]}+'/'+{$data1_2[6]}+'<br>二年'+{$data2_3[6]}+'/'+{$data2_2[6]}+'<br>多年'+{$data3_3[6]}+'/'+{$data3_2[6]}+'<br>综合'+{$data5_3[6]}+'/'+{$data5_2[6]},
+            '白沟<br>首年:'+{$data1_3[7]}+'/'+{$data1_2[7]}+'<br>二年'+{$data2_3[7]}+'/'+{$data2_2[7]}+'<br>多年'+{$data3_3[7]}+'/'+{$data3_2[7]}+'<br>综合'+{$data5_3[7]}+'/'+{$data5_2[7]},
+            '邢台<br>首年:'+{$data1_3[8]}+'/'+{$data1_2[8]}+'<br>二年'+{$data2_3[8]}+'/'+{$data2_2[8]}+'<br>多年'+{$data3_3[8]}+'/'+{$data3_2[8]}+'<br>综合'+{$data5_3[8]}+'/'+{$data5_2[8]},
+            '西安<br>首年:'+{$data1_3[9]}+'/'+{$data1_2[9]}+'<br>二年'+{$data2_3[9]}+'/'+{$data2_2[9]}+'<br>多年'+{$data3_3[9]}+'/'+{$data3_2[9]}+'<br>综合'+{$data5_3[9]}+'/'+{$data5_2[9]},
+            '集团<br>首年:'+{$zsnum1_2}+'/'+{$zsnum1_2+$zsnum1_1}+'<br>二年'+{$zsnum2_2}+'/'+{$zsnum2_2+$zsnum2_1}+'<br>多年'+{$zsnum3_2}+'/'+{$zsnum3_2+$zsnum3_1}+'<br>综合'+{$zsnum4_2}+'/'+{$zsnum4_2+$zsnum4_1}
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: '百分比 (%)'
+        },
+        lables:{
+        step:1
+        }
+    },
+    tooltip: {
+        // head + 每个 point + footer 拼接成完整的 table
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            borderWidth: 0,
+            dataLabels: { enabled: true}
+        }
+    },
+    series: [{
+        name: '首年',
+        data: [{$bl_1[1]},{$bl_1[2]},{$bl_1[3]},{$bl_1[4]},{$bl_1[5]},{$bl_1[6]},{$bl_1[7]},{$bl_1[8]},{$bl_1[9]}, {$bl_1[10]}]
+    }, 
+    {
+        name: '二年',
+        data: [{$bl_2[1]},{$bl_2[2]},{$bl_2[3]},{$bl_2[4]},{$bl_2[5]},{$bl_2[6]},{$bl_2[7]},{$bl_2[8]},{$bl_2[9]}, {$bl_2[10]}]
+    }, {
+        name: '多年',
+        data: [{$bl_3[1]},{$bl_3[2]},{$bl_3[3]},{$bl_3[4]},{$bl_3[5]},{$bl_3[6]},{$bl_3[7]},{$bl_3[8]},{$bl_3[9]}, {$bl_3[10]}]
+    }, {
+        name: '回签',
+        data: [{$data4_3[1]},{$data4_3[2]},{$data4_3[3]},{$data4_3[4]},{$data4_3[5]},{$data4_3[6]},{$data4_3[7]},{$data4_3[8]},{$data4_3[9]}, {$data4_3[10]}]
+    },{
+        name: '综合',
+        data: [{$bl_5[1]},{$bl_5[2]},{$bl_5[3]},{$bl_5[4]},{$bl_5[5]},{$bl_5[6]},{$bl_5[7]},{$bl_5[8]},{$bl_5[9]},{$bl_5[10]}]
+    }]
+});
+    </script>
+<div>
+   <table class="layui-table">
+  <thead>
+    <tr>
+      <th>分公司</th>
+      <th>总TP</th>
+      <th>0A</th>
+      <th>0A占比</th>
+      <th>1A</th>
+      <th>1A占比</th>
+      <th>2A</th>
+      <th>2A占比</th>
+      <th>3A</th>
+      <th>3A占比</th>
+      <th>4A</th>
+      <th>4A占比</th>
+      <th>5A</th>
+      <th>5A占比</th>
+    </tr> 
+  </thead>
+  <tbody>
+    {foreach name="medal" item="list" key="key"}
+    <tr>
+        {if condition="$list['tp'] != 0"}
+        <td>{$key}</td>
+        <td>{$list['tp']}</td>
+        <td>{$list['0']}</td>
+     
+        <td><?php $arr =$list['0']/$list['tp']*100; echo round($arr,2);?>%</td>
+   
+        <td>{$list['1']}</td>
+   
+        <td><?php $arr =$list['1']/$list['tp']*100; echo round($arr,2);?>%</td>
+      
+        <td>{$list['2']}</td>
+        
+     
+        <td><?php $arr =$list['2']/$list['tp']*100; echo round($arr,2);?>%</td>
+
+        <td>{$list['3']}</td>
+   
+        <td><?php $arr =$list['3']/$list['tp']*100; echo round($arr,2);?>%</td>
+     
+        <td>{$list['4']}</td>
+      
+        <td><?php $arr =$list['4']/$list['tp']*100; echo round($arr,2);?>%</td>
+       
+        <td>{$list['5']}</td>
+      
+        <td><?php $arr =$list['5']/$list['tp']*100; echo round($arr,2);?>%</td>
+        
+    </tr>
+    {/if}
+    {/foreach}
+  </tbody>
+</table>
+
+<!--个人配比开始--> 
+<div id="container2" style="min-width:400px;height:400px"></div>
+<script type="text/javascript">
+    var arr='<?php echo json_encode($matching["data"]) ?>';
+    var title='<?php echo json_encode($matching["title"]) ?>';
+    var nav=JSON.parse(arr);
+    var title=JSON.parse(title);
+    var chart = Highcharts.chart('container2',{
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '个人配比'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        categories: title,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: '百分比 (%)'
+        },
+        lables:{
+        step:1
+        }
+    },
+    tooltip: {
+        // head + 每个 point + footer 拼接成完整的 table
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            borderWidth: 0,
+            dataLabels: { enabled: true}
+        }
+    },
+    series: [{
+        name: '个人配比',
+        data: nav
+    }]
+});
+    </script>
+</div>
+{include file="public/footer"/}

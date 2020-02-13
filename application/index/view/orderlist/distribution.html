@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+   <style type="text/css">
+     .layui-form-select dl{
+      max-height:100px;
+     }
+   </style>
+   <link rel="stylesheet" href="/backend/css/zTreeStyle.css">
+</head>
+<body class="layui-layout-body">
+<form class="layui-form" action="" method="post" id="custmers1">
+  <input type="hidden" name="pid" value="{$pid}">
+  <div class="layui-form-item">
+     <div class="layui-inline">
+      <div class="layui-input-inline">
+        <select name="user">
+        {volist name="user2" id="usvo"}
+          <option {if $user1==$usvo.username}selected{/if} value="{$usvo.username}">{$usvo.username}</option>
+        {/volist}
+        </select>
+      </div>
+    </div>
+  </div> 
+   <button class="layui-btn" lay-submit="" id="searchBtn"  lay-filter="tranCustomer" data-type="getInfo" style="margin-left:120px;">转移业绩</button>
+  </form>
+<script type="text/javascript" src="/backend/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="/backend/js/jquery.ztree.excheck.min.js"></script>
+  <script type="text/javascript">
+layui.use('form', function(){
+  var form = layui.form;
+    form.on('submit(tranCustomer)', function(data){
+    //layer.msg(JSON.stringify(data.field));
+   $.ajax({
+        url:"/index/Orderlist/xiugai",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+            // console.log(data);
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+                 parent.location.reload();
+           });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+});
+  return false;
+});
+});
+</script>
+ </body>
+ </html>

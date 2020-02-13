@@ -1,0 +1,66 @@
+<script src="../../../../editor/kindeditor-all-min.js"></script>{include file="public/header"/}
+
+<div class="layui-body">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        {if condition="empty($res['comment'])"}
+            <legend>添加销售锦囊</legend>
+        {else}
+            <legend>修改销售锦囊</legend>
+        {/if}
+
+    </fieldset>
+
+    <form>
+        <textarea name="content" style="width:800px;height:400px;visibility:hidden;">{$res['comment']}</textarea>
+        <p>
+            <input type="button" name="getHtml" value="确定" />
+            <input type="button" name="clear" value="清空" />
+        </p>
+        {if condition="!empty($res['comment'])"}
+        <input type="hidden" value="{$res['id']}" name="id">
+        {/if}
+    </form>
+
+</div>
+
+<script charset="utf-8" src="../../editor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="../../editor/lang/zh-CN.js"></script>
+<script>
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('textarea[name="content"]', {
+            allowFileManager : true
+        });
+        K('input[name=getHtml]').click(function(e) {
+            var id = $('input[name=id]').val();
+
+            var data = editor.html();
+
+            $.ajax({
+                url:"{:url('index/instructions/addsales')}",
+                type:"POST",
+                dataType:"json",
+                data:{data:data,id:id},
+                success:function(res){
+                    if (res == 1){
+                        alert('修改成功')
+                    }else if (res == 2){
+                        alert('修改失败')
+                    }else if(res== 3){
+                        alert('添加成功')
+                    }else if(res == 4) {
+                        alert('添加失败')
+                    }
+                }
+            });
+        });
+        K('input[name=clear]').click(function(e) {
+            editor.html('');
+        });
+    });
+</script>
+
+
+
+
+{include file="public/footer"/}

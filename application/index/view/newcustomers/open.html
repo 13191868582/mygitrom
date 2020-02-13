@@ -1,0 +1,266 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>新签订单列表</legend>
+        </fieldset>
+        <form action="{:url('newcustomers/open')}" method="get" id="custmers">
+            <div class="layui-input-block" style="float: left; position: relative;margin-right: 5px;margin-bottom: 10px;">
+                <input style="width: auto;" type="text" id="select_orderId" name="search" lay-verify="required" placeholder="阿里订单或签单姓名" autocomplete="off" class="layui-input"value="{$search}">
+            </div>
+            <button class="layui-btn" lay-submit="" id="searchBtn"  data-type="getInfo" style="float: left;">搜索</button>
+        </form>
+        {if $Think.session.user.rank eq 11}
+        <form  class="layui-form"  action="{:url('newcustomers/open')}" method="get">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <select name="bid" id="industry1"  lay-filter="industry1">
+                        <option value="0">选择分公司</option>
+                        {volist name="$branch" id="vo"}
+                        {if $bid==$vo['id']}
+                        <option value="{$vo.id}" selected>{$vo.name}</option>
+                        {else/}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/if}
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="uid" id="industry2" lay-filter="industry2">
+                        {if $username}
+                        <option value="{$uid}">{$username}</option>
+                        {else/}
+                        <option value="">请选择员工</option>
+                        {/if}
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="ortype">
+                        {if $ortype==1}
+                        <option value="0">请选择订单类型</option>
+                        <option value="1" selected>诚信通</option>
+                        <option value="2">网销宝</option>
+                        <option value="3">建站服务包</option>
+                        <option value="4">代运营</option>
+                        {elseif $ortype==2}
+                        <option value="0">请选择订单类型</option>
+                        <option value="1">诚信通</option>
+                        <option value="2" selected>网销宝</option>
+                        <option value="3">建站服务包</option>
+                        <option value="4">代运营</option>
+                        {elseif $ortype==3}
+                        <option value="0">请选择订单类型</option>
+                        <option value="1">诚信通</option>
+                        <option value="2">网销宝</option>
+                        <option value="3" selected>建站服务包</option>
+                        <option value="4">代运营</option>
+                        {elseif $ortype==4}
+                        <option value="0">请选择订单类型</option>
+                        <option value="1">诚信通</option>
+                        <option value="2">网销宝</option>
+                        <option value="3">建站服务包</option>
+                        <option value="4" selected>代运营</option>
+                        {else/}
+                        <option value="0">请选择订单类型</option>
+                        <option value="1">诚信通</option>
+                        <option value="2">网销宝</option>
+                        <option value="3">建站服务包</option>
+                        <option value="4">代运营</option>
+                        {/if}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">到单时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="start" id="start" value="{$start}" lay-verify="start" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="end" id="end" value="{$end}" lay-verify="end" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <button   class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon" >搜索</i></button>
+                <a  href="/index/newcustomers/open.html" class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon" >重置</i></a>
+            </div>
+        </form>
+        {/if}
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>订单号</th>
+                    <th>阿里订单号</th>
+                    <th>公司名称</th>
+                    <th>订单金额</th>
+                    <th>签单姓名</th>
+                    <th>分公司名称</th>
+                    <th>订单类型</th>
+                    <th>到单时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td>{$vo['ordernum']}</td>
+                    <td>{$vo['aliordernum']}</td>
+                    <td>{$vo['company']}</td>
+                    <td>{$vo['money']}元</td>
+                    <td>{$vo['username']}</td>
+                    <td>{$vo['bid']|branch}</td>
+                    <td>
+                        {if $vo.ortype==1}
+                        诚信通
+                        {elseif $vo.ortype==2/}
+                        网销宝
+                        {elseif $vo.ortype==3/}
+                        建站服务包
+                        {elseif $vo.ortype==4/}
+                        代运营
+                        {/if}
+                    </td>
+                    <td>{$vo['totime']|date="Y-m-d",###}</td>
+                    <td>
+                        {if $vo['status']==1}
+                        <font color="#daa520">待开通诚信通</font>
+                        {elseif $vo['status']==2/}
+                        <font color="green">已开通</font>
+                        {elseif $vo['status']==3/}
+                         <font color="green">财务已通过</font>
+                        {elseif $vo['wopen']==1/}
+                        <font color="#daa520">待开通网销宝</font>
+                        {elseif $vo['wopen']==2/}
+                        <font color="green">已开通</font>
+                        {elseif $vo['wopen']==3/}
+                        <font color="green">财务已通过</font>
+                        {elseif $vo['wopen']==4/}
+                        <font color="red">财务拒绝</font>
+                        {elseif $vo['dopen']==1/}
+                        <font color="#daa520">待开通代运营</font>
+                        {elseif $vo['dopen']==2/}
+                        <font color="green">已开通</font>
+                        {elseif $vo['dopen']==3/}
+                        <font color="green">财务已通过</font>
+                        {elseif $vo['dopen']==4/}
+                        <font color="red">财务拒绝</font>
+                        {elseif $vo['zopen']==1/}
+                        <font color="#daa520">待开通建站服务包</font>
+                        {elseif $vo['zopen']==2/}
+                        <font color="green">已开通</font>
+                        {elseif $vo['zopen']==3/}
+                        <font color="green">财务已通过</font>
+                        {elseif $vo['zopen']==4/}
+                        <font color="red">财务已通过</font>
+                        {/if}
+                    </td>
+                    <td>
+                        {if $vo['status']==1}
+                        <a href="/index/newcustomers/opened?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >开通诚信通</button></a>
+                        <a href="/index/newcustomers/openedup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >查看详情</button></a>
+                        {elseif $vo['status']==4/}
+                        <a  data-id="{$vo.id}" href="javascript:;" class="layui-btn layui-btn-xs status1">重新开通</a>
+                        {elseif $vo['wopen']==1/}
+                        <a href="/index/newcustomers/wopened?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >开通网销宝</button></a>
+                        <a href="/index/newcustomers/openedup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >查看详情</button></a>
+                        {elseif $vo['wopen']==4/}
+                        <a href="/index/newcustomers/againup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >重新开通网销宝</button></a>
+                        {elseif $vo['zopen']==1/}
+                        <a href="/index/newcustomers/wopened?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >开通建站服务包</button></a>
+                        <a href="/index/newcustomers/openedup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >查看详情</button></a>
+                        {elseif $vo['zopen']==4/}
+                        <a href="/index/newcustomers/againup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >重新开通建站服务包</button></a>
+                        {elseif $vo['dopen']==1/}
+                        <a href="/index/newcustomers/wopened?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >开通代运营</button></a>
+                        <a href="/index/newcustomers/openedup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >查看详情</button></a>
+                        {elseif $vo['dopen']==4/}
+                        <a href="/index/newcustomers/againup?oid={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >重新开通代运营</button></a>
+                        {else/}
+                        <button type="button" class="layui-btn layui-btn-disabled">禁用按钮</button>
+                        {/if}
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            {$list->render()}当前页总条数：{$sum}
+        </div>
+        <img alt="" style="display:none" id="displayimg" src="" />
+        </body></div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/heightchats/highcharts.js"></script>
+<script src="/static/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('select(industry1)',function(data){
+            var fid=data.value;
+            console.log(fid);
+            $.ajax({
+                url: "{:url('Newcustomers/userLists')}",//请求地址
+                type: "POST",//请求方式
+                dataType: "JSON",//返回数据类型
+                data: {fid:fid},//发送的参数
+                success:function(data){
+                    var re=data.data;
+                    // console.log(data);
+                    $('#industry2 option').hide();
+                    var proHtml = '';
+                    proHtml += '<option value="0">请选择员工</option>';
+                    for(var i=0;i<data.data.length;i++){
+                        proHtml += '<option value="'+re[i].id+'">'+re[i].username+'</option>';
+                    }
+                    $('#industry2').html(proHtml);
+                    form.render();
+
+                },
+                error:function(){
+                    //失败执行的方法
+                    alert("error");
+                }
+            })
+        })
+    })
+</script>
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    $(".status1").click(function(e){
+        var id = $(e.target).attr("data-id");
+        console.log(id);
+        $.post("{:url('Newcustomers/openstatus')}",{"id":id},function(data){
+            if(data.code==200){
+                layer.msg(data.msg,{icon:1});
+                setTimeout("window.location.reload()",1000);
+            }else{
+                layer.msg(data.msg,{icon:2});
+            }
+        },"json");
+    });
+</script>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#start',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#end',
+            // value:new Date()
+        });
+    });
+</script>
+{include file="public/footer"/}

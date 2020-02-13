@@ -1,0 +1,56 @@
+<div style="width:100%;height:600px;" id="tihuan1">
+    {volist name="bestnew" id="vo"}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="br_img">
+                        {if $vo.people_photo!=""}
+                        <img src="{$vo.people_photo}">
+                        {else/}
+                        <img src="/static/index/header.png">
+                        {/if}
+                        <table class="layui-table" border="0">
+                            <tr>
+                                <td style="border-top:none;border-left:none;">姓名<br><span>{$vo.people_name}</span></td>
+                                <td style="border-top:none;border-right:none;">所在分公司<br><span>{$vo.branch_id|branch}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom:none;border-left:none;">座右铭<br><span>{$vo.peopl_motto}</span></td>
+                                <td style="border-bottom:none;border-right:none;">时间<br><span>{:date('Y-m-d',$vo['people_time'])}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body" style="height:488px;">
+                    <div class="br_img">
+                        <table class="layui-table" border="0"style="margin-top:130px;">
+                            <tr>
+                                <td style="border-left:none;border-top:none;border-right:none;" colspan="2">名次<br><span style="color:red">
+                                    {if $vo.ranking==1}
+                          第一名
+                          {elseif $vo.ranking==2/}
+                          第二名
+                          {elseif $vo.ranking==3/}
+                          第三名
+                          {/if}
+                        </span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"style="border-bottom:none;border-left:none;">
+                                    入选理由:
+                                    <p>{$vo.peopl_performance}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/volist}
+</div>

@@ -1,0 +1,137 @@
+{include file="public/header"/}
+
+<div class="layui-body">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  		<legend>添加店铺信息</legend>
+	</fieldset>
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<div class="layui-inline">
+			    <label class="layui-form-label">店铺会员ID</label>
+			    <div class="layui-input-inline">
+			        <input type="tel" name="shop_id" lay-verify="required" autocomplete="off" placeholder="请输入店铺会员ID" class="layui-input">
+			    </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+			    <label class="layui-form-label">密码</label>
+			    <div class="layui-input-inline">
+			        <input type="tel" name="password" lay-verify="required" autocomplete="off" placeholder="请输入店铺会员ID" class="layui-input">
+			    </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+			    <label class="layui-form-label">公司名称</label>
+			    <div class="layui-input-inline">
+			        <input type="tel" name="corporate_name" lay-verify="required" autocomplete="off" placeholder="请输入公司名称" class="layui-input">
+			    </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		      	<label class="layui-form-label">联系方式</label>
+		      	<div class="layui-input-inline">
+		        	<input type="tel" name="phone" lay-verify="required|phone" placeholder="请输入联系方式" autocomplete="off" class="layui-input">
+		     	 </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+			    <label class="layui-form-label">联系人</label>
+			    <div class="layui-input-inline">
+			        <input type="tel" name="username" lay-verify="required" autocomplete="off" placeholder="请输入联系人" class="layui-input">
+			    </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+			    <label class="layui-form-label">合作方式</label>
+			    <div class="layui-input-inline">
+			        <input type="tel" name="cooperation_mode" lay-verify="required" autocomplete="off" placeholder="请输入合作方式" class="layui-input">
+			    </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+      			<label class="layui-form-label">合作时间</label>
+      			<div class="layui-input-inline">
+        			<input type="text" name="cooperation_time" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      			</div>
+    		</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+      			<label class="layui-form-label">合作到期时间</label>
+      			<div class="layui-input-inline">
+        			<input type="text" name="expire_time" id="expire_time" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      			</div>
+    		</div>
+		</div>
+		<div style="padding-left: 10%;">
+			<button class="layui-btn layui-btn-normal btn"  lay-filter="formDemo" lay-submit>添加</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('.btn').click(function(){
+			var shop_id = $("input[name='shop_id']").val();
+			var password = $("input[name='password']").val();
+			var corporate_name = $("input[name='corporate_name']").val();
+			var phone = $("input[name='phone']").val();
+			var username = $("input[name='username']").val();
+			var cooperation_mode = $("input[name='cooperation_mode']").val();
+			var cooperation_time = $("input[name='cooperation_time']").val();
+			var expire_time = $("input[name='expire_time']").val();
+
+			$.ajax({
+				url: "{:url('index/shop/add')}",
+				type: 'POST',
+				dataType: 'json',
+				data: {shop_id:shop_id,password:password,corporate_name:corporate_name,phone:phone,username:username,cooperation_mode:cooperation_mode,cooperation_time:cooperation_time,expire_time:expire_time},
+				success:function(res){
+					if (res) {
+						alert('添加成功')
+						history.go(-1)
+					}else{
+						alert('添加失败')
+					}
+				}
+			})
+			
+			
+
+		})
+	})
+</script>
+
+<script type="text/javascript">
+	layui.use(['form', 'layedit', 'laydate'], function(){
+		var form = layui.form
+		  ,layer = layui.layer
+		  ,layedit = layui.layedit
+		  ,laydate = layui.laydate;
+		  
+		  //日期
+		  laydate.render({
+		    elem: '#date'
+		  });
+		  laydate.render({
+		    elem: '#expire_time'
+		  });
+
+
+
+            //监听提交
+            form.on('submit(formDemo)', function(data){
+                //ajax
+                //console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                //console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value};获取单个值data.field["title"]
+                
+            });
+	})
+</script>
+{include file="public/footer"/}

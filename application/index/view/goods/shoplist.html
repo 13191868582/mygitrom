@@ -1,0 +1,69 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+    {volist name="page" id="shop"}
+        <div style="float:left">
+          <a href="/index/goods/goodlist?id={$shop.id}">
+            <img src="{$shop.goods_pic}" style="width:200px;height:200px;padding:20px;">
+            <div class="code" style="padding-left:35px;color:#ff0033;font-weight:bold;padding-bottom:10px;"><span style="font-size:20px;">￥{$shop.price}豆币</span></div>
+            <div class="code" style="padding-left:35px;font-weight:bold;padding-bottom:5px;">商品名称：<span>{$shop.goods_name}</span></div>
+            
+          </a>
+          <div style="padding-left:35px;"><a href="/index/goods/buy?id={$shop.id}"><button type="button" class="layui-btn layui-btn-danger">立即购买</button></a></div>
+        </div>
+    {/volist}
+    {$page->render()}
+    </div>
+</div>
+<script>
+// function buy(id)
+// {
+//     layer.confirm('确认购买', {icon: 3, title:'提示'}, function(index){
+//   //do something
+//    $.ajax({
+//             url:'/index/goods/buy',
+//             type:"POST",
+//             dataType:"json",
+//             data:{id:id},
+//             success:function(data){
+//                 console.log(data);
+//                 if(data.code==200){
+//                     layer.msg(data.msg,{icon:1,time:1600},function(){
+//                     window.location.href='/index/goods/lists';
+//                     });
+//                 }else{
+//                     layer.msg(data.msg,{icon:2,time:1600});
+//                 }
+//             },
+//             error:function(jqXHR){
+//                 layer.msg("发生错误："+ jqXHR.status);
+//             }
+//         });
+//   layer.close(index);
+// });
+    
+// }
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  //日期
+  laydate.render({
+    elem: '#start',
+    // value:new Date()
+  });
+ laydate.render({
+    elem: '#end',
+    // value:new Date()
+  });
+});
+</script>
+{include file="public/footer"/}

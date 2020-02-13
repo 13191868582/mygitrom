@@ -1,0 +1,670 @@
+{include file="public/header"/}
+{load href="/static/index/index.css"/}
+{if $Think.session.user.department neq 1 and $Think.session.user.department neq 6 and $Think.session.user.department neq 7 and $Think.session.user.department neq 9 }
+{load href="/static/index/echarts.min.js"/}
+<script type="text/javascript">
+  var prp=<?php echo $prp;?>;
+  if(prp){
+
+  }else{
+    window.onload=function(){
+      layer.open({
+        title:'<div style="padding-left:45%;font-size:20px">每日答题</div>',
+        type: 2,
+        closeBtn:0,
+        maxmin: true,
+        area: ['60%', '50%'],
+        shadeClose: false, //点击遮罩关闭
+        content:'{:url("index/problem")}'
+      });
+    }}
+</script>
+{/if}
+<script type="text/javascript" src="/static/index/index.js"></script>
+<div class="layui-body" style="background: #f2f5fe">
+  <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+      <li class="layui-this">分公司</li>
+      <li>名人堂</li>
+      <li>王者PK</li>
+    </ul>
+    <div class="layui-tab-content" style="height: 100px;">
+      <!-- 分公司排行榜 -->
+      <div class="layui-tab-item layui-show">
+        <div class="br_com">
+          <form class="layui-form" action="">
+            <div class="layui-form-item">
+              <div class="layui-input-inline" style="font-size:24px;width:210px;">
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;margin-left:375px;width:80px;">
+                <select name="quiz1" lay-filter="sj">
+                  <option value="">请选择</option>
+                  <option value="0">月度</option>
+                  <option value="1">季度</option>
+                  <option value="2">半年度</option>
+                  <option value="3">年度</option>
+                </select>
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;width:100px;">
+                <select name="quiz1" id="th" lay-filter="quiz1">
+
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        {if empty($month)}
+        <div style="width:75%;height:600px;">
+          <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body">
+                  <div class="br_img">
+                    <img src="/static/index/header.png">
+                    <table class="layui-table" border="0">
+                      <tr>
+                        <td style="border-top:none;border-left:none;">评选时间<br><span style="color:red">
+
+                        </span></td>
+                        <td style="border-top:none;border-right:none;">分公司名称<br><span>集团</span></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"style="border-bottom:none;border-left:none;">
+                          董事长寄语:
+
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body">
+                  <div class="br_cavas">
+                    <div style=""></div>
+                    <div class="br_img">
+                      <img src="/static/index/header.png">
+                      <table class="layui-table" border="0">
+                        <tr>
+                          <td style="border-left:none;border-top:none;border-right:none;" colspan="2">名次<br><span style="color:red">
+                        </span></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2"style="border-bottom:none;border-left:none;">
+                            入选理由:
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {else/}
+        <div style="width:75%;height:600px;" id="tihuan">
+          {volist name="month" id="vo"}
+          <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body">
+                  <div class="br_img">
+                    {if $vo.h_branch_photo!=""}
+                    <img src="{$vo.h_branch_photo}">
+                    {else/}
+                    <img src="/static/index/header.png">
+                    {/if}
+                    <table class="layui-table" border="0">
+                      <tr>
+                        <td style="border-top:none;border-left:none;">评选时间<br><span style="color:red">
+                         {:date('Y-m',$vo['h_month'])}
+                        </span></td>
+                        <td style="border-top:none;border-right:none;">分公司名称<br><span>{$vo.h_branch|branch}</span></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"style="border-bottom:none;border-left:none;">
+                          董事长寄语:
+                          {$vo.h_chairman_message}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body">
+                  <div class="br_cavas">
+                    <div style=""></div>
+                    <div class="br_img">
+                      {if $vo.h_team_photo!=""}
+                      <img src="{$vo.h_team_photo}">
+                      {else/}
+                      <img src="/static/index/header.png">
+                      {/if}
+                      <table class="layui-table" border="0">
+                        <tr>
+                          <td style="border-left:none;border-top:none;border-right:none;" colspan="2">名次<br><span style="color:red">
+                          {if $vo.ranking==1}
+                          第一名
+                          {elseif $vo.ranking==2/}
+                          第二名
+                          {elseif $vo.ranking==3/}
+                          第三名
+                          {/if}
+                        </span></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2"style="border-bottom:none;border-left:none;">
+                            入选理由:
+                            {$vo.h_chairman_message}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/volist}
+        </div>
+        {/if}
+      </div>
+      <div class="layui-tab-item">
+        <div class="br_com">
+          <form class="layui-form" action="">
+            <div class="layui-form-item">
+              <div class="layui-input-inline" style="font-size:24px;width:210px;">
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;margin-left:375px;width:80px;">
+                <select name="quiz2" lay-filter="sj2">
+                  <option value="">请选择</option>
+                  <option value="0">TOP</option>
+                  <option value="1">优秀领军人</option>
+                  <option value="2">节点精英</option>
+                </select>
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;width:80px;">
+                <select name="quiz2" id="th2" lay-filter="quiz2">
+
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div style="width:75%;height:600px;" id="tihuan1">
+          {volist name="bestnew" id="vo"}
+          <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body">
+                  <div class="br_img">
+                    {if $vo.people_photo!=""}
+                    <img src="{$vo.people_photo}">
+                    {else/}
+                    <img src="/static/index/header.png">
+                    {/if}
+                    <table class="layui-table" border="0">
+                      <tr>
+                        <td style="border-top:none;border-left:none;">姓名<br><span>{$vo.people_name}</span></td>
+                        <td style="border-top:none;border-right:none;">所在分公司<br><span>{$vo.branch_id|branch}</span></td>
+                      </tr>
+                      <tr>
+                        <td style="border-bottom:none;border-left:none;">座右铭<br><span>{$vo.peopl_motto}</span></td>
+                        <td style="border-bottom:none;border-right:none;">时间<br><span>{:date('Y-m-d',$vo['people_time'])}</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body" style="height:488px;">
+                  <div class="br_img">
+                    <table class="layui-table" border="0"style="margin-top:130px;">
+                      <tr>
+                        <td style="border-left:none;border-top:none;border-right:none;" colspan="2">名次<br><span style="color:red">
+                                                 {if $vo.ranking==1}
+                          第一名
+                          {elseif $vo.ranking==2/}
+                          第二名
+                          {elseif $vo.ranking==3/}
+                          第三名
+                          {/if}
+                        </span></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"style="border-bottom:none;border-left:none;">
+                          入选理由:
+                          <p>{$vo.peopl_performance}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/volist}
+        </div>
+      </div>
+      <div class="layui-tab-item">
+        <div class="br_com">
+          <form class="layui-form" action="">
+            <div class="layui-form-item">
+              <div class="layui-input-inline" style="font-size:22px;width:250px;">
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;width:80px;margin-left:100px">
+                <select name="quiz1">
+                  <option value="">TOP</option>
+                </select>
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;width:80px;">
+                <select name="quiz3" lay-filter="sj3">
+                  <option value="">请选择</option>
+                  <option value="0">月度</option>
+                  <option value="1">季度</option>
+                  <option value="2">半年度</option>
+                  <option value="3">年度</option>
+                </select>
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;width:100px;" id="shijian">
+
+              </div>
+              <div class="layui-input-inline" style="font-size:12px;width:80px;" id="bumen">
+
+              </div>
+            </div>
+          </form>
+        </div>
+        <div style="width:75%;height:600px;" id="tihuan3">
+          {volist name="trump" id="vo"}
+          <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body">
+                  <div class="br_img">
+                    {if $vo.people_photo!=""}
+                    <img src="{$vo.people_photo}">
+                    {else/}
+                    <img src="/static/index/header.png">
+                    {/if}
+                    <table class="layui-table" border="0">
+                      <tr>
+                        <td style="border-top:none;border-left:none;">姓名<br><span>{$vo.people_name}</span></td>
+                        <td style="border-top:none;border-right:none;">所在部门<br><span>{$vo.branch_id|branch}</span></td>
+                      </tr>
+                      <tr>
+                        <td style="border-bottom:none;border-left:none;">座右铭<br><span>{$vo.peopl_motto}</span></td>
+                        <td style="border-bottom:none;border-right:none;">时间<br><span>{:date('Y-m-d',$vo['people_time'])}</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="layui-col-md6">
+              <div class="layui-card">
+                <div class="layui-card-body" style="height:488px;">
+                  <div class="br_img">
+                    <table class="layui-table" border="0"style="margin-top:130px;">
+                      <tr>
+                        <td colspan="2"style="border-bottom:none;border-left:none;">
+                          评选时间:
+                          <p>{:date('Y-m',$vo['h_month'])}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="border-left:none;" colspan="2">名次<br><span style="color:red">
+                                    {if $vo.ranking==1}
+                          第一名
+                          {elseif $vo.ranking==2/}
+                          第二名
+                          {elseif $vo.ranking==3/}
+                          第三名
+                          {/if}
+                        </span></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"style="border-bottom:none;border-left:none;">
+                          入选理由:
+                          <p>{$vo.people_chosen}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"style="border-bottom:none;border-left:none;">
+                          个人业绩:
+                          <p>{$vo.peopl_performance}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/volist}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    layui.use('element', function(){
+      var $ = layui.jquery
+              ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+      //触发事件
+      var active = {
+        tabAdd: function(){
+          //新增一个Tab项
+          element.tabAdd('demo', {
+            title: '新选项'+ (Math.random()*1000|0) //用于演示
+            ,content: '内容'+ (Math.random()*1000|0)
+            ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+          })
+        }
+        ,tabDelete: function(othis){
+          //删除指定Tab项
+          element.tabDelete('demo', '44'); //删除：“商品管理”
+
+
+          othis.addClass('layui-btn-disabled');
+        }
+        ,tabChange: function(){
+          //切换到指定Tab项
+          element.tabChange('demo', '22'); //切换到：用户管理
+        }
+      };
+
+      $('.site-demo-active').on('click', function(){
+        var othis = $(this), type = othis.data('type');
+        active[type] ? active[type].call(this, othis) : '';
+      });
+
+      //Hash地址的定位
+      var layid = location.hash.replace(/^#test=/, '');
+      element.tabChange('test', layid);
+
+      element.on('tab(test)', function(elem){
+        location.hash = 'test='+ $(this).attr('lay-id');
+      });
+
+    });
+  </script>
+
+  <script>
+    layui.use('element', function(){
+      var element = layui.element;
+    });
+    layui.use('form', function(){
+      var form = layui.form;
+      form.on('select(sj)',function(data){
+        var status=data.value;
+        var proHtml = '';
+        if(status==0){
+          $('#th').empty();
+          history.go(0);
+        }else if(status==1){
+          $('#th').empty();
+          proHtml += '<option value="">请选择</option>\n' +
+                  '<option value="Q1">Q1</option>\n' +
+                  '<option value="Q2">Q2</option>\n' +
+                  '<option value="Q3">Q3</option>\n' +
+                  '<option value="Q4">Q4</option>\n'
+          $('#th').append(proHtml);
+          form.on('select(quiz1)',function(data) {
+            var q=data.value;
+            $.ajax({
+              url:'/index/index',
+              type:"POST",
+              dataType:"json",
+              data:{q:q},
+              success:function(data){
+                $("#tihuan").empty();
+                $("#tihuan").append(data);
+              }
+            })
+          });
+        }else if(status==2){
+          $('#th').empty();
+          proHtml += '<option value="">请选择</option>\n' +
+                  '<option value="S1">S1</option>\n' +
+                  '<option value="S2">S2</option>\n'
+          $('#th').append(proHtml);
+          form.on('select(quiz1)',function(data) {
+            var q=data.value;
+            $.ajax({
+              url:'/index/index',
+              type:"POST",
+              dataType:"json",
+              data:{q:q},
+              success:function(data){
+                $("#tihuan").empty();
+                $("#tihuan").append(data);
+              }
+            })
+          });
+        }else if(status==3){
+          $('#th').empty();
+          $.ajax({
+            url:'/index/index',
+            type:"POST",
+            dataType:"json",
+            data:{q:"year"},
+            success:function(data){
+              $("#tihuan").empty();
+              $("#tihuan").append(data);
+            }
+          })
+        }
+        form.render();
+      })
+    });
+  </script>
+  <script>
+    layui.use('element', function(){
+      var element = layui.element;
+    });
+    layui.use('form', function(){
+      var form = layui.form;
+      form.on('select(sj2)',function(data){
+        var status=data.value;
+        var proHtml1 = '';
+        if(status==0){
+          $('#th2').empty();
+          proHtml1 += '<option value="">请选择</option>\n' +
+                  '<option value="新签">新签</option>\n' +
+                  '<option value="续签">续签</option>\n' +
+                  '<option value="网销宝">网销宝</option>\n' +
+                  '<option value="系外">系外</option>\n'
+          $('#th2').append(proHtml1);
+          form.on('select(quiz2)',function(data) {
+            var m=data.value;
+            $.ajax({
+              url:'/index/index',
+              type:"POST",
+              dataType:"json",
+              data:{m:m},
+              success:function(data){
+                $("#tihuan1").empty();
+                $("#tihuan1").append(data);
+              }
+            })
+          });
+        }else if(status==1){
+          $('#th2').empty();
+          proHtml1 += '<option value="">请选择</option>\n' +
+                  '<option value="经理">经理</option>\n' +
+                  '<option value="总监">总监</option>\n' +
+                  '<option value="GM">GM</option>\n'
+          $('#th2').append(proHtml1);
+          form.on('select(quiz2)',function(data) {
+            var y=data.value;
+            $.ajax({
+              url:'/index/index',
+              type:"POST",
+              dataType:"json",
+              data:{y:y},
+              success:function(data){
+                $("#tihuan1").empty();
+                $("#tihuan1").append(data);
+              }
+            })
+          });
+        }else if(status==2){
+          $('#th2').empty();
+          $.ajax({
+            url:'/index/index',
+            type:"POST",
+            dataType:"json",
+            data:{y:"节点精英"},
+            success:function(data){
+              $("#tihuan1").empty();
+              $("#tihuan1").append(data);
+            }
+          })
+        }
+        form.render();
+      })
+    });
+  </script>
+  <script>
+    layui.use('element', function(){
+      var element = layui.element;
+    });
+    layui.use('form', function(){
+      var form = layui.form;
+      form.on('select(sj3)',function(data){
+        var status=data.value;
+        var proHtml1 = '';
+        var proHtml3='';
+        if(status==0){
+          $('#shijian').empty();
+          $('#bumen').empty();
+          proHtml1 += '<select name="mo" lay-filter="mo">\n' +
+                  '<option value="">请选择</option>\n' +
+                  '<option value="新签">新签</option>\n' +
+                  '<option value="续签">续签</option>\n' +
+                  '<option value="网销宝">网销宝</option>\n' +
+                  '<option value="系外">系外</option>\n' +
+                  '</select>'
+          $('#shijian').append(proHtml1);
+          form.on('select(mo)',function(data) {
+            var w=data.value;
+            $.ajax({
+              url:'/index/index',
+              type:"POST",
+              dataType:"json",
+              data:{w:w},
+              success:function(data){
+                $("#tihuan3").empty();
+                $("#tihuan3").append(data);
+              }
+            })
+          });
+        }else if(status==1){
+          $('#shijian').empty();
+          $('#bumen').empty();
+          proHtml1 += '<select name="mo" lay-filter="mo" id="mo">\n' +
+                  '<option value="">请选择</option>\n' +
+                  '<option value="Q1">Q1</option>\n' +
+                  '<option value="Q2">Q2</option>\n' +
+                  '<option value="Q3">Q3</option>\n' +
+                  '<option value="Q4">Q4</option>\n' +
+                  '</select>'
+          $('#shijian').append(proHtml1);
+          proHtml3 += '<select name="mo1" lay-filter="mo1">\n' +
+                  '<option value="">请选择</option>\n' +
+                  '<option value="新签">新签</option>\n' +
+                  '<option value="续签">续签</option>\n' +
+                  '<option value="网销宝">网销宝</option>\n' +
+                  '<option value="系外">系外</option>\n' +
+                  '</select>'
+          $('#bumen').append(proHtml3)
+          form.on('select(mo)',function(data) {
+            var b=data.value;
+            form.on('select(mo1)',function(data) {
+              var c=data.value;
+              $.ajax({
+                url:'/index/index',
+                type:"POST",
+                dataType:"json",
+                data:{b:b,c:c},
+                success:function(data){
+                  $("#tihuan3").empty();
+                  $("#tihuan3").append(data);
+                }
+              })
+            });
+          });
+        }else if(status==2){
+          $('#shijian').empty();
+          $('#bumen').empty();
+          proHtml1 += '<select name="mo" lay-filter="mo" id="mo3">\n' +
+                  '<option value="">请选择</option>\n' +
+                  '<option value="S1">S1</option>\n' +
+                  '<option value="S2">S2</option>\n' +
+                  '</select>'
+          $('#shijian').append(proHtml1);
+          proHtml3 += '<select name="mo1" lay-filter="mo1">\n' +
+                  '<option value="">请选择</option>\n' +
+                  '<option value="新签">新签</option>\n' +
+                  '<option value="续签">续签</option>\n' +
+                  '<option value="网销宝">网销宝</option>\n' +
+                  '<option value="系外">系外</option>\n' +
+                  '</select>'
+          $('#bumen').append(proHtml3)
+          form.on('select(mo)',function(data) {
+            var b=data.value;
+            form.on('select(mo1)',function(data) {
+              var c=data.value;
+              $.ajax({
+                url:'/index/index',
+                type:"POST",
+                dataType:"json",
+                data:{b:b,c:c},
+                success:function(data){
+                  $("#tihuan3").empty();
+                  $("#tihuan3").append(data);
+                }
+              })
+            });
+          });
+        }else if(status==3){
+          $('#shijian').empty();
+          $('#bumen').empty();
+          proHtml3 += '<select name="mo1" lay-filter="mo1">\n' +
+                  '<option value="">请选择</option>\n' +
+                  '<option value="新签">新签</option>\n' +
+                  '<option value="续签">续签</option>\n' +
+                  '<option value="网销宝">网销宝</option>\n' +
+                  '<option value="系外">系外</option>\n' +
+                  '</select>'
+          $('#bumen').append(proHtml3)
+          form.on('select(mo1)',function(data) {
+            var n=data.value;
+            $.ajax({
+              url:'/index/index',
+              type:"POST",
+              dataType:"json",
+              data:{v:"年度",n:n},
+              success:function(data){
+                $("#tihuan3").empty();
+                $("#tihuan3").append(data);
+              }
+            })
+          });
+
+        }
+        form.render();
+      })
+    });
+  </script>
+  {include file="public/footer"/}

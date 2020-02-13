@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>河北银豆豆crm系统</title>
+    {load href="/static/layui/css/layui.css"/}
+    {load href="/static/layui/layui.js"/}
+    {load href="/static/jquery-3.3.1.min.js"/}
+    <style type="text/css">
+        .layui-form-select dl{
+            max-height:300px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="" method="get" >
+    <input type="hidden" name="pid" value="{$id}">
+        <label class="layui-form-label">所属分公司</label>
+        <div class="layui-input-inline">
+            <select  name="fgsid" lay-filter="industry1" style="height: 600px">
+                <option value="">请选择分公司</option>
+                {volist name="$br" id="vo"}
+                <option value="{$vo.id}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+    <div class="layui-input-inline">
+        <select name="u_id" id="industry2" lay-filter="industry2">
+            <option value=""></option>
+        </select>
+    </div>
+    <button class="layui-btn" lay-submit=""   lay-filter="insert" data-type="getInfo" style="margin-left:120px;margin-top: 10px">确认</button>
+</form>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('select(industry1)',function(data){
+            var fid=data.value;
+            $.ajax({
+                url: "{:url('Orderlist/fusername')}",//请求地址
+                type: "POST",//请求方式
+                dataType: "JSON",//返回数据类型
+                data: {fid:fid},//发送的参数
+                success:function(data){
+                    var re=data.data;
+                    $('#industry2 option').hide();
+                    var proHtml = '';
+                    for(var i=0;i<data.data.length;i++){
+                        proHtml += '<option value="'+re[i].id+'">'+re[i].username+'</option>';
+                    }
+                    $('#industry2').html(proHtml);
+                    form.render();
+
+                },
+                error:function(){
+                    //失败执行的方法
+                    alert("error");
+                }
+            })
+
+        })
+
+        form.on('submit(insert)', function(data){
+            // layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                url: "{:url('Orderlist/adjdo')}",
+                type:"POST",
+                dataType:"json",
+                data:data.field,
+                success:function(data){
+                    console.log(data);
+                    if(data.code==200){
+                        layer.msg(data.msg,{icon:1,time:1600},function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:1600});
+                    }
+                },
+                error:function(jqXHR){
+                    layer.msg("发生错误："+ jqXHR.status);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

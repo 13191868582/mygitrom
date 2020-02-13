@@ -1,0 +1,64 @@
+{include file="public/header"/}
+
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">           
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>菜单添加</legend>
+</fieldset>
+<form class="layui-form" action="">
+      <!-- <div class="layui-form-item">
+      <label class="layui-form-label">菜单名称</label>
+      <div class="layui-input-inline">
+      <input type="text" name="name" lay-verify="required" autocomplete="off" value="" placeholder="请输入菜单名称" class="layui-input">
+      </div>
+      </div> -->
+      {if condition="empty($pid)"}
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="menu" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+            <input type="hidden" name="pid" value="0">
+        </div>
+    </div>
+    {else}
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级菜单:</label>
+        <div class="layui-input-inline">
+            <select name="pid">{foreach $tree as $tr}<option value="{$tr.id}" {if condition="$tr.id==$pid"}selected{/if}>{$tr.name}</option>{/foreach}</select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">子菜单:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="menu" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+        </div>
+    </div>
+    {/if}
+
+      <div class="layui-form-item">
+      <label class="layui-form-label">菜单路径</label>
+      <div class="layui-input-inline">
+      <input type="text" name="title"  autocomplete="off" value="" placeholder="请输入小写路径名称" class="layui-input">
+      </div>
+      </div>
+      <div class="layui-form-item">
+      <label class="layui-form-label">菜单状态</label>
+      <div class="layui-input-block">
+      <input type="radio" name="status" value="1" title="显示" checked>
+      <input type="radio" name="status" value="2" title="隐藏" >
+      </div>
+      </div>
+      <div class="layui-form-item">
+      <div class="layui-input-block">
+      <button class="layui-btn" lay-submit="" lay-filter="add_author">确认提交</button>
+      </div>
+      </div>
+      </form>
+    </div>
+  </div>
+ <!--  <script type="text/javascript">
+  		function  adduser
+  </script> -->
+  {load href="/static/author/author.js"/}
+{include file="public/footer"/}

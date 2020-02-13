@@ -1,0 +1,487 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>客户管理</legend>
+        </fieldset>
+        <form class="layui-form" action="{:url('customers/index')}" method="get" id="custmers">
+            <div class="layui-input-block" style="float: left; position: relative;margin-left:0">
+                <label class="layui-form-label">公司搜索</label>
+
+                <input style="width: auto;" type="text" id="select_orderId" name="corporate_name"  placeholder="公司名称或阿里用户名" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">到期时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="start" id="start" lay-verify="start" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="end" id="end" lay-verify="end" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+            </div>
+
+             <div class="layui-form-item">
+                {if $Think.session.user.rank eq 5 || $Think.session.user.rank eq 14}
+            {else/}
+                <label class="layui-form-label">员工</label>
+                <div class="layui-input-inline">
+                  <select name="usernames" lay-filter="aihao" id="usernames">
+                    <option value=""> 请选择员工</option>
+                     {volist name="users" id="ulist"}
+                     <option {if $userid eq $ulist.id }selected{/if} value="{$ulist.id}">{$ulist.username}</option>
+                    {/volist}
+                  </select>
+                </div>
+                {/if}
+                <button class="layui-btn" lay-submit="" id="searchBtn" onclick="submitf()" data-type="getInfo">搜索</button>
+              </div>
+
+        </form>
+        {if $Think.session.user.rank eq 5|| $Think.session.user.rank eq 14}
+
+        {else/}
+
+        {if $Think.session.user.rank eq 3 || $Think.session.user.rank eq 1 || $Think.session.user.rank eq 2 || $Think.session.user.rank eq 12 || $Think.session.user.rank eq 13}
+        <div style="padding-left: 20px;float:left">
+            <a class="layui-btn layui-btn-normal" href="javascript:void(0);" onclick="all_full({$user.branch_id})">批量转移</a>
+        </div>
+       {/if}
+        {if $Think.session.user.rank eq 2}
+        <div style="padding-left: 20px;float:left">
+            <a class="layui-btn layui-btn-normal" href="javascript:void(0);" onclick="all_del()">批量删除</a>
+        </div>
+       {/if}
+
+        <div style="padding-left:20px;float: right;">
+            <a class="layui-btn layui-btn-normal" href="{:url('Customers/index')}?type=4">TP</a>
+            <a class="layui-btn layui-btn-normal" href="{:url('Customers/index')}?type=3">非TP</a>
+            <a class="layui-btn layui-btn-normal" href="{:url('Customers/index')}?type=2">未分配客户</a>
+            <a class="layui-btn layui-btn-normal" href="{:url('Customers/index')}?type=1">已分配客户</a>
+        </div>
+        {/if}
+        <div class="layui-form">
+            <table class="layui-table" id="tab">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                    <th>姓名</th>
+                    <th>阿里用户名</th>
+                    <th>公司名称</th>
+                    <!-- <th>移动电话</th> -->
+                    <!-- <th>年龄</th>
+                    <th>职位</th>
+                    <th>微信</th>
+                    <th>QQ</th> -->
+                    <th>开通时间</th>
+                    <th>到期时间</th>
+                    <th>续费状态</th>
+                    <!-- <th>续费进度</th> -->
+                    <th>客户类型</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="page" id="list"}
+
+                <tr>
+                    <td><input type="checkbox" name="" value="{$list['id']}" lay-skin="primary" lay-filter="oneChoose"></td>
+                    <td>{$list['username']}</td>
+                    <td>{$list['aliname']}</td>
+                    <td>{$list['corporate_name']}</td>
+                   <!--  <td>{$list['moblie']}</td>
+                    <td>{$list['age']}</td>
+                    <td>{$list['position']|position}</td>
+                    <td>{$list['weixin']}</td>
+                    <td>{$list['qq']}</td> -->
+                    <td>{$list['sign_date']|date="Y-m-d",###}</td>
+                    <td>
+                        {if $list['expires']==0}
+                        {else/}
+                        {$list['expires']|date="Y-m-d",###}
+                        {/if}
+                    </td>
+                    <td> {if $list['expires'] < time()}
+                        <font color="#ff3333">已过期</font>
+                        {elseif $list['examine']==0/}
+                        <font color="green">未续费</font>
+                        {elseif $list['examine']==3/}
+                        <font color="blue">审核中</font>
+                        {elseif $list['examine']==2}
+                        <font color="red">未通过</font>
+                        {/if}
+                    </td>
+
+
+
+<!--
+                    <td> {if $list['examine']==1}
+                        <font color="green">通过</font>
+                        {elseif $list['examine']==2/}
+                        <font color="red">不通过</font>
+                        {elseif $list['examine']==3 /}
+                        <font color="#daa520">审核中。。</font>
+                        {else /}
+                        {/if}</td> -->
+                    <td>
+                        {if $list['w_sta']==1}
+                        诚信通
+                        {elseif $list['w_sta']==5 /}
+                        诚信通
+                        {elseif $list['w_sta']==0/}
+                        诚信通
+                        {else/}
+                        诚信通，网销宝
+                        {/if}
+                    </td>
+                    <td><a href="{:url('Customers/edit')}?id={$list['id']}"><button type="button" class="layui-btn layui-btn-xs">查看详情</button></a>
+                        {if condition="($user['rank'] == 5) or ($user['rank'] == 2) or ($user['rank']==3) or ($user['rank']==14 or($user['rank']==13) or($user['rank']==12) )"}
+                        {if condition="$list['c_status'] eq 1"}
+                            <button onclick="relation1({$list.id},{$user.branch_id})" type="button" class="layui-btn layui-btn-normal layui-btn-xs">查看分配</button>
+                        {else/}
+                            <button onclick="distribution1({$list.id},{$user.branch_id},{$list.expires})" type="button" class="layui-btn layui-btn-danger layui-btn-xs">分配</button>
+                        {/if}</a>
+                        {else/}
+                        {if condition="$list['relation_status'] eq 1"}
+                            <button onclick="relation({$list.id})" type="button" class="layui-btn layui-btn-normal layui-btn-xs">查看分配</button>
+                        {else/}
+                            <button onclick="distribution({$list.id},{$list.expires})" type="button" class="layui-btn layui-btn-danger layui-btn-xs">分配</button>
+                        {/if}</a>
+                        {/if}
+                        {if $user['rank'] == 5 || $user['rank'] == 14}
+                            {if $list['examine'] eq 0 && time()+180*60*60*24>$list.expires}
+                                <a href="{:url('Customers/renew')}?id={$list['id']}"><button type="button" class="layui-btn layui-btn-xs">续费</button></a>
+                            {/if}
+                        {/if}
+                         {if $user['rank'] == 5 || $user['rank'] == 1 || $user['rank'] == 2 || $user['rank'] == 3 || $user['rank'] == 12 || $user['rank'] == 13|| $user['rank'] == 14}
+                        {if condition="service_list($list['id'])"}
+                         <a href="{:url('Services/service_cum')}?id={$list['id']}"><button type="button" class="layui-btn layui-btn-xs">服务列表</button></a>
+                        {/if}
+                        {/if}
+
+                        {if $list['w_sta']==1 && $Think.session.user.rank eq 5}
+                        <a href="/index/customers/wlists?id={$list['id']}"><button type="button" class="layui-btn layui-btn-xs" >网销宝到单</button></a>
+                        {else/}
+
+                        {/if}
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            {$page->render()}
+            
+            <p>
+                数量:<span>{$page->total()}</span>
+            </p>
+        </div>
+        <img alt="" style="display:none" id="displayimg" src="" />
+        </body></div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $('.btn1').click(function(){
+            var id = $("input[name=hang]").val();
+
+            window.location.href='{:url("Customers/index")}?page='+ id ;
+        });
+    })
+</script>
+<!-- <script type="text/javascript">
+            function demoMouseOver(id){
+                // layer.alert(id);
+                layer.open({
+                title:'分配信息',
+                type: 1,
+                area: ['19%', '42%'],
+                shadeClose: false, //点击遮罩关闭
+                content:"<img onclick=downloadImage('http://qr.topscan.com/api.php?text="+id+"') src='http://qr.topscan.com/api.php'>"
+                });
+            }
+
+            function downloadImage(path) {
+                imgSrc = path;
+                fiel = new Date();
+                $('body').append('<a id="saimg" href="/download/image?src='+imgSrc+'"><span></span></a>');
+                $('#saimg span').click();
+                $('#saimg').remove();
+        }
+  </script> -->
+ <script type="text/javascript">
+    var ids =new Array();
+    layui.use('form', function(){
+        var $ = layui.jquery;
+        var form = layui.form;
+        //全选
+        form.on('checkbox(allChoose)', function(data){
+         var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+          child.each(function(index, item){
+          item.checked = data.elem.checked;
+         });
+         form.render('checkbox');
+        });
+    });
+    //全选提交
+    function all_full(id)
+    {
+        var admins = [];
+          $(".layui-form-checked").each(function(i,element){
+              admins.push($(element).prev().val());
+         });
+          if(admins[0]=='on'){
+            admins.splice(0,1);
+          }
+          // admins=admins.join(',');
+          console.log(admins);
+        if(admins.length == 0){
+            layer.msg('未选择客户',{icon:2,time:1600});
+        }else{
+            layer.open({
+            title:'分配信息',
+            type: 2,
+            area: ['25%', '30%'],
+            shadeClose: false, //点击遮罩关闭
+            content:"{:url('Customers/all_full')}?branch_id="+id+'&array='+admins
+            });
+        }
+        // console.log(ids);
+    }
+    //全部删除
+    function all_del()
+    {
+        var admins=[];
+         $(".layui-form-checked").each(function(i,element){
+              admins.push($(element).prev().val());
+         });
+          if(admins[0]=='on'){
+            admins.splice(0,1);
+          }
+          if(admins.length == 0){
+            layer.msg('未选择客户',{icon:2,time:1600});
+        }else{
+            layer.confirm('您确定要删除吗?',{btn: ['确定', '取消'],title:"提示"}, function(){
+            $.ajax({
+                type: "post",
+                url: "{:url('Customers/all_del')}?array="+admins,
+                data: null,
+                dataType: "json",
+                async:false,
+                success:function(data) {
+                    if(data.code == 200){
+                        layer.msg('删除成功', {icon: 1});
+                        window.location.href='/index/Customers/index';
+                    }else{
+                        layer.msg('删除失败', {icon: 2});
+                    }
+                }
+            });
+        });
+        }
+    }
+</script>
+<script type="text/javascript">
+    function distribution(id,expires) {
+        $.ajax({
+            type:'POST',
+            url:"{:url('Customers/distribution')}",
+            dataType: "JSON",//返回数据类型
+            data:"",//发送的参数
+            success:function(data){
+                var user=data.data;
+                var html="";
+                html+='<form class="layui-form" action="">'
+                html+='<input type="hidden" name="cid" value="'+id+'">'
+                html+='<input type="hidden" name="maturitys" value="'+expires+'">'
+                html+='<div class="layui-form-item">'
+                html+='<label class="layui-form-label">分公司名称</label>'
+                html+=' <div class="layui-input-inline">'
+                html+='<select name="oid" lay-verify="required" lay-search="">'
+                for(var i=0;i<user.length;i++){
+                    html+='<option value="'+user[i].id+'">'+user[i].name+'</option>'
+                }
+                html+='</select>'
+                html+='</div>'
+                html+='</div>'
+                html+='<div class="layui-form-item">'
+                html+='<div class="layui-input-block">'
+                html+='<button class="layui-btn" lay-submit="" lay-filter="fenpei">确认分配</button>'
+                html+='</div>'
+                html+='</div>'
+                html+='</form>'
+                layui.use('form', function(){
+                    var form = layui.form;
+                    layer.open({
+                        title:'分配客户',
+                        type: 1,
+                        area: ['25%', '25%'],
+                        shadeClose: false, //点击遮罩关闭
+                        content:html
+                    });
+
+                    form.render();
+                    form.on('submit(fenpei)', function(data){
+                        // layer.msg(JSON.stringify(data.field));
+                        $.ajax({
+                            url:'/index/Customers/fenpei',
+                            type:"POST",
+                            dataType:"json",
+                            data:data.field,
+                            success:function(data){
+                                console.log(data);
+                                if(data.code==200){
+                                    layer.msg(data.msg,{icon:1,time:1600},function(){
+                                        window.location.href='/index/Customers/index';
+                                    });
+                                }else{
+                                    layer.msg(data.msg,{icon:2,time:1600});
+                                }
+                            },
+                            error:function(jqXHR){
+                                layer.msg("发生错误："+ jqXHR.status);
+                            }
+                        });
+                        return false;
+                    });
+                })
+            }
+        })
+
+    }
+    function relation(id)
+    {
+        $.ajax({
+            type:"POST",
+            url:"{:url('Customers/relation')}",
+            dataType:'json',
+            data:{id:id},
+            success:function(data){
+                var list=data.data;
+                var html="";
+                html += '<table class="layui-table" lay-size="sm">'
+                html += '<thead>'
+                html+='<tr>'
+                html+='<th>所属分公司</th>'
+                html+='<th>分配时间</th>'
+                html+='<th>更新时间</th>'
+                html+='</tr>'
+                html+='</thead>'
+                for (var i =0;i<list.length;i++) {
+                    html+='<tr>'
+                    html+='<td>'+list[i].name+'</td>'
+                    html+='<td>'+list[i].addtime+'</td>'
+                    html+='<td>'+list[i].updatetime+'</td>'
+                    html+='</tr>'
+                }
+                html+='</table>'
+                layer.open({
+                    title:'分配信息',
+                    type: 1,
+                    area: ['25%', '25%'],
+                    shadeClose: false, //点击遮罩关闭
+                    content:html
+                });
+            }
+        })
+    }
+    function distribution1(id,dat,expires) {
+        $.ajax({
+            type:'POST',
+            url:"{:url('Customers/distribution1')}",
+            dataType: "JSON",//返回数据类型
+            data:{bid:dat},//发送的参数
+            success:function(data){
+                var user=data.data;
+                var html="";
+                html+='<form class="layui-form" action="">'
+                html+='<input type="hidden" name="cid" value="'+id+'">'
+                html+='<input type="hidden" name="maturitys" value="'+expires+'">'
+                html+='<div class="layui-form-item">'
+                html+='<label class="layui-form-label">员工</label>'
+                html+=' <div class="layui-input-inline">'
+                html+='<select name="uid" lay-verify="required" lay-search="">'
+                for(var i=0;i<user.length;i++){
+                html+='<option value="'+user[i].id+'">'+user[i].username+'</option>'
+                }
+                html+='</select>'
+                html+='</div>'
+                html+='</div>'
+                html+='<div class="layui-form-item">'
+                html+='<div class="layui-input-block">'
+                html+='<button class="layui-btn" lay-submit="" lay-filter="fenda">确认分配</button>'
+                html+='</div>'
+                html+='</div>'
+                html+='</form>'
+                layui.use('form', function(){
+                    var form = layui.form;
+                    layer.open({
+                        title:'分配客户',
+                        type: 1,
+                        area: ['25%', '25%'],
+                        shadeClose: false, //点击遮罩关闭
+                        content:html
+                    });
+
+                    form.render();
+                    form.on('submit(fenda)', function(data){
+                        // layer.msg(JSON.stringify(data.field));
+                        $.ajax({
+                            url:'/index/Customers/fenda',
+                            type:"POST",
+                            dataType:"json",
+                            data:data.field,
+                            success:function(data){
+                                console.log(data);
+                                if(data.code==200){
+                                    layer.msg(data.msg,{icon:1,time:1600},function(){
+                                        window.location.href='/index/Customers/index';
+                                    });
+                                }else{
+                                    layer.msg(data.msg,{icon:2,time:1600});
+                                }
+                            },
+                            error:function(jqXHR){
+                                layer.msg("发生错误："+ jqXHR.status);
+                            }
+                        });
+                        return false;
+                    });
+                })
+            }
+        })
+
+    }
+    function relation1(id,dat)
+    {
+        layer.open({
+            title:'分配信息',
+            type: 2,
+            area: ['25%', '50%'],
+            shadeClose: false, //点击遮罩关闭
+            content:"{:url('Customers/relation1')}?id="+id+"&branch_id="+dat
+        });
+    }
+</script>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  //日期
+  laydate.render({
+    elem: '#start',
+    // value:new Date()
+  });
+ laydate.render({
+    elem: '#end',
+    // value:new Date()
+  });
+});
+</script>
+{include file="public/footer"/}

@@ -1,0 +1,295 @@
+{include file="public/header"/}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>王牌VS王牌</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <input type="hidden" name="id" value="{$data.id}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">个人照片</label>
+                <div class="layui-upload" style="margin-left:100px">
+                    <button type="button" class="layui-btn" id="test2">上传照片</button><span style="color:red;padding-left:20px">请上传图片尺寸为宽450高350</span>
+                    <input type="hidden" name="people_photo" id="id_pic1" value="{$data.people_photo}">
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" id="demo2" src="{$data.people_photo}" width="30%">
+                        <p id="demoText1"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="people_name"  value="{$data.people_name}" autocomplete="off" placeholder="请输入姓名" class="layui-input" style="width:192px" lay-verify="required">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名次</label>
+                <div class="layui-input-inline">
+                    <select name="ranking"   lay-verify="required">
+                        <option value="">请选择</option>
+                        {if $data.ranking==1}
+                        <option value="1" selected>第一名</option>
+                        <option value="2">第二名</option>
+                        <option value="3">第三名</option>
+                        {elseif $data.ranking==2}
+                        <option value="1">第一名</option>
+                        <option value="2" selected>第二名</option>
+                        <option value="3">第三名</option>
+                        {elseif $data.ranking==3}
+                        <option value="1">第一名</option>
+                        <option value="2" >第二名</option>
+                        <option value="3"selected>第三名</option>
+                        {else/}
+                        <option value="1">第一名</option>
+                        <option value="2" >第二名</option>
+                        <option value="3">第三名</option>
+                        {/if}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">时间类型</label>
+                <div class="layui-input-inline">
+                    <select  name="h_time"  id="h_time" lay-filter="h_time" lay-verify="required">
+                        <option value="">请选择时间类型</option>
+                        <option value="月度">月度</option>
+                        <option value="季度">季度</option>
+                        <option value="半年度">半年度</option>
+                        <option value="年度">年度</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item" style="display:none" id="months">
+                <label class="layui-form-label">月度</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="h_month" id="date4" lay-verify="date4" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="display:none" id="season">
+                <label class="layui-form-label">季度</label>
+                <div class="layui-input-inline">
+                    <select name="h_season" id="h_season" lay-filter="h_season" >
+                        <option value="">请选择季度</option>
+                        <option value="Q1">Q1</option>
+                        <option value="Q2">Q2</option>
+                        <option value="Q3">Q3</option>
+                        <option value="Q4">Q4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item" style="display:none" id="halfyear">
+                <label class="layui-form-label">半年度</label>
+                <div class="layui-input-inline">
+                    <select name="h_halfyear" id="h_halfyear" lay-filter="h_halfyear" >
+                        <option value="">请选择半年度</option>
+                        <option value="S1">S1</option>
+                        <option value="S2">S2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">分公司名称</label>
+                <div class="layui-input-inline">
+                    <select name="branch_id" lay-filter="aihao" id="usernames" lay-verify="required">
+                        <option value="">请选择</option>
+                        {volist name="branch" id="vo"}
+                        {if $data.branch_id==$vo.id}
+                        <option value="{$vo.id}" selected>{$vo.name}</option>
+                        {else/}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/if}
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">部门名称</label>
+                <div class="layui-input-inline">
+                    <select name="department" lay-filter="aihao"  lay-verify="required">
+                        <option value="">请选择</option>
+                        {if $data.department=="新签"}
+                        <option value="新签" selected>新签</option>
+                        <option value="续签">续签</option>
+                        <option value="网销宝">网销宝</option>
+                        <option value="系外">系外</option>
+                        {elseif $data.department=="续签"}
+                        <option value="新签">新签</option>
+                        <option value="续签" selected>续签</option>
+                        <option value="网销宝">网销宝</option>
+                        <option value="系外">系外</option>
+                        {elseif $data.department=="网销宝"}
+                        <option value="新签">新签</option>
+                        <option value="续签" >续签</option>
+                        <option value="网销宝" selected>网销宝</option>
+                        <option value="系外">系外</option>
+                        {elseif $data.department=="系外"}
+                        <option value="新签">新签</option>
+                        <option value="续签" >续签</option>
+                        <option value="网销宝" >网销宝</option>
+                        <option value="系外" selected>系外</option>
+                        {/else}
+                        <option value="新签">新签</option>
+                        <option value="续签">续签</option>
+                        <option value="网销宝">网销宝</option>
+                        <option value="系外">系外</option>
+                        {/if}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">个人业绩</label>
+                <div class="layui-input-block">
+                    <textarea  name="peopl_performance" class="layui-textarea" lay-verify="required">{$data.peopl_performance}</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">个人座右铭</label>
+                <div class="layui-input-block">
+                    <textarea  name="peopl_motto"  class="layui-textarea">{$data.peopl_motto}</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">入选理由</label>
+                <div class="layui-input-block">
+                    <textarea  name="people_chosen"  class="layui-textarea">{$data.people_chosen}</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="people_time" id="date" value="{$data.people_time|date='Y-m-d',###}" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" lay-verify="required">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="addde">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/js/area.js" type="text/javascript"></script>
+<script src="/static/js/select.js" type="text/javascript"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#date',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#date1',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#date3'
+            ,type: 'month'
+        })
+        laydate.render({
+            elem: '#date4'
+            ,type: 'month'
+        })
+    });
+</script>
+<script type="text/javascript">
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test2'
+            ,url: "{:url('index/upload')}"
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo2').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                $("#id_pic1").val(res.url);
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText1');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload1').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    layui.use(['form'], function () {
+        //必须要初始化 form
+        var form = layui.form,
+            layer = layui.layer;
+        form.on('select(h_time)', function (data) {
+            //获取当前选中下拉项的 value值
+            var type = data.value;
+            if (type=="月度"){
+                $('#months').show();
+                $('#season').hide();
+                $('#halfyear').hide()
+            }else if(type=="季度"){
+                $('#months').hide();
+                $('#season').show();
+                $('#halfyear').hide()
+            }else if(type=="半年度"){
+                $('#months').hide();
+                $('#season').hide();
+                $('#halfyear').show()
+            }else{
+                $('#months').hide();
+                $('#season').hide();
+                $('#halfyear').hide()
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(addde)', function(data){
+            $.ajax({
+                url:"{:url('Honors/editvlistsdo')}",
+                type:"POST",
+                dataType:"json",
+                data:data.field,
+                success:function(data){
+                    if(data.code==200){
+                        layer.msg("编辑成功！",{icon:1,time:1600},function(){
+                            window.location.href="{:url('index/honors/wlists')}";
+                        });
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:1600});
+                    }
+                },
+                error:function(jqXHR){
+                    layer.msg("发生错误："+ jqXHR.status);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+{include file="public/footer"/}

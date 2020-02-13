@@ -1,0 +1,129 @@
+{include file="public/header"/}
+<style type="text/css">
+.pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+.pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+.pagination .active{background-color: #dd1a20;color: #fff;}
+.pagination .disabled{color:#aaa;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">         
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>服务完结率</legend>
+</fieldset>
+ <form class="layui-form" action="{:url('Statistics/completeRate')}" method="post" id="custmers1">
+  <div class="layui-form-item" style="float: left;">
+    <div class="layui-inline">
+      <div class="layui-input-inline">
+        {if $Think.session.user.rank > 1}
+          {$Think.session.user.branch_id|branch}
+        {else/}
+         <select id="branch_id" name="branch_id" lay-verify="required" lay-search="">
+          <option value="0">所有公司</option>
+          {volist name="company" id="list"}
+          <option value="{$list.id}">{$list.name}</option>
+          {/volist}
+        </select>
+        {/if}
+       
+      </div>
+    </div>
+       <div class="layui-inline">
+      <div class="layui-input-inline">
+        <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div> 
+   <button class="layui-btn" lay-submit="" id="searchBtn" onclick="search1()" data-type="getInfo" style="float: left;">搜索</button>
+  </form>
+  <form action="{:url('Statistics/allExport')}" method="post">
+    <input type="hidden" name="branch_id" id="branch" value="{$bid}">
+    <input type="hidden" name="date" id="time" value="{$date}">
+     <button class="layui-btn export" lay-submit="" id="searchBtn" data-type="getInfo" style="float: left;margin-left: 40px;">导出</button>
+  </form>
+ 
+<div class="layui-form">
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>公司名称</th>
+        <th>规定服务</th>
+        <th>实际完成</th>
+        <th>完成率</th>
+        <th>可选服务</th>
+        <th>实际完成</th>
+        <th>完成率</th>
+      </tr> 
+    </thead>
+    <tbody>
+      {empty name="bid"}
+       {volist name="lists" id="vo"}
+       <tr>
+        <?php if(!empty($vo[0]['name'])){?>
+        <td>{$vo[0]['name']}</td>
+        <?php }else{?>
+        <td>所有公司</td>
+        <?php }?>
+        <td>{if $vo[0]['p_num']}{$vo[0]['p_num']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['p_nums']}{$vo[0]['p_nums']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['p_num']}{$vo[0]['p_nums']/$vo[0]['p_num']*100|round=2}%{else/}--{/if}</td>
+        <td>{if $vo[0]['o_num']}{$vo[0]['o_num']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['o_nums']}{$vo[0]['o_nums']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['o_num']}{$vo[0]['o_nums']/$vo[0]['o_num']*100|round=2}%{else/}--{/if}</td>
+
+       </tr>
+       {/volist}  
+      {else /}
+      {volist name="lists" id="vo"}
+      <tr>
+        <td>{$bid|branch}</td>
+        <td>{if $vo[0]['p_num']}{$vo[0]['p_num']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['p_nums']}{$vo[0]['p_nums']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['p_num']}{$vo[0]['p_nums']/$vo[0]['p_num']*100|round=2}%{else/}--{/if}</td>
+        <td>{if $vo[0]['o_num']}{$vo[0]['o_num']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['o_nums']}{$vo[0]['o_nums']}项{else/}--{/if}</td>
+        <td>{if $vo[0]['o_num']}{$vo[0]['o_nums']/$vo[0]['o_num']*100|round=2}%{else/}--{/if}</td>
+        
+       
+      </tr>
+      {/volist}
+      {/empty}
+      
+      
+    </tbody>
+
+  </table>
+</div>
+<img alt="" style="display:none" id="displayimg" src="" />
+</body></div>
+  </div>
+
+<script type="text/javascript">
+  function search1() {
+    var form=$('#custmers1')
+    form.submit();
+  }
+  function search2(){
+    var form=$('#custmers2')
+    form.submit();
+  }
+</script>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  
+  //日期
+  laydate.render({
+    elem: '#date',
+    type: 'month',
+    value:new Date()
+  });
+  // laydate.render({
+  //   elem: '#date1'
+  // });
+});
+</script>
+{include file="public/footer"/}

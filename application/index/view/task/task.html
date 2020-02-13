@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>银豆豆任务目标系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/task.css">
+    <style>
+    </style>
+    <script src="/static/heightchats/highcharts.js"></script>
+    <script src="/static/heightchats/modules/exporting.js"></script>
+    <script src="/static/heightchats/modules/variable-pie.js"></script>
+    <script src="/static/task.js"></script>
+</head>
+<body>
+<div>
+    <div class="layui-row layui-col-space5">
+        <div class="layui-col-xs8 layui-carousel" id="test1" >
+            <div carousel-item >
+                <div id="qiehuan">
+                    <div class="layui-col-xs6">
+                        <div class="layui-card" style="margin-bottom: 0px;">
+                            <div class="layui-card-header">新签销售数据统计</div>
+                            <div class="layui-card-body">
+                                <div id="container"></div>
+                                <div id="line1"></div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">续签客服数据统计</div>
+                            <div class="layui-card-body">
+                                <div id="huan"></div>
+                                <div id="line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-card" style="margin-bottom: 0px ">
+                            <div class="layui-card-header header1">
+                                <div style="display: flex;background: #09153D">
+                                    <div style="margin-top:16px;">河北银豆豆营销数据检测平台</div>
+                                    <div style="font-size:12px;">
+                                        <div id="time" style="color:#3781F9;"></div>
+                                        <div style="color:#3781F9">更新时间{:date('Y-m-d H:i:s',$data['ntime']['time'])}</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex;justify-content : space-between;background: #09153D">
+                                    <div class="tongji" style="display: flex;">
+                                        <image src="/static/image/icon.png"><div style="font-size:14px;">大数据统计</div>
+                                    </div>
+                                    <div style="margin-left:2%;width:40%;border-bottom: 2px solid #3781F9;font-size:12px;color:#fff">{$data['city']}全部数据</div>
+                                    <!--  <div style="font-weight:bold;font-size: 15px">/////&nbsp;
+                                         &nbsp;<span style="color: #fff">全网数据</span>&nbsp;&nbsp;/////</div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card" >
+                            <div class="layui-card-header" style="margin-top: 60px;">代运营销售业绩</div>
+                            <div class="layui-card-body">
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card">
+                                        <div class="layui-card-body" >
+                                            <div id="zhu"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs6" style="background:#09153D;height: 300px;">
+                                    <div class="layui-card" style="background:#09153D;">
+                                        <div class="layui-card-body" >
+                                            <div class="layui-card-header f">本月数据统计:</div>
+                                            <div class="layui-col-xs6 e">
+                                                <div class="layui-card">
+                                                    <div class="layui-card-body a" >
+                                                        {$data.daito}
+                                                    </div>
+                                                    <div class="layui-card-header b">本月目标(万元)</div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6 e">
+                                                <div class="layui-card">
+                                                    <div class="layui-card-body a" >
+                                                        {$data.dai}
+                                                    </div>
+                                                    <div class="layui-card-header b">本月到单(万元)</div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-card-header f" style="margin-top:45%;">本季数据统计:</div>
+                                            <div class="layui-col-xs6 e">
+                                                <div class="layui-card">
+                                                    <div class="layui-card-body a" >
+                                                        {$data.daijito}
+                                                    </div>
+                                                    <div class="layui-card-header b">本月目标(万元)</div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6 e">
+                                                <div class="layui-card">
+                                                    <div class="layui-card-body a" >
+                                                        {$data.daiji}
+                                                    </div>
+                                                    <div class="layui-card-header b">本月到单(万元)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header" style="margin-top:57%;">网销宝销售订单</div>
+                            <div class="layui-card-body">
+                                <div class="layui-col-xs5" >
+                                    <div class="layui-card" style="background:#09153D">
+                                        <div class="layui-card-body" style="height: 190px;display: flex;">
+                                            <div class="dd" style="color:#EA1D5E;font-size:12px;">{$data.mp4p}单<p style="color:#4381E6;">本月到单</p></div>
+                                            <div class="dd" style="color:#FFD238;font-size:12px">{$data.mp4pto}单<p style="color: #4381E6;">本月目标</p></div>
+                                        </div>
+                                        <div class="layui-card-body" style="height: 190px;display: flex;">
+                                            <div class="dd" style="color:#1FFF90;font-size:12px">{$data.sp4p}单<p style="color: #4381E6;">本季度到单</p></div>
+                                            <div class="dd" style="color:#CF00ED;font-size:12px">{$data.sp4pto}单<p style="color: #4381E6;">本季度目标</p></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs7">
+                                    <div class="layui-card">
+                                        <div class="layui-card-body" >
+                                            <div id="zhu2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--               <div>-->
+<!--                   <img src="../img/测试/2.jpg" />-->
+<!--               </div>-->
+<!--                 <div><img src="../img/测试/3.jpg" /></div>-->
+<!--                 <div><img src="../img/测试/4.jpg" /></div>-->
+<!--                 <div><img src="../img/测试/5.jpg" /></div> -->
+            </div>
+        </div>
+
+        <div class="layui-col-xs4">
+            <div class="layui-card zz">
+                <div class="layui-card-header">新签销售排行榜</div>
+                <div class="layui-card-body d">
+                    <table class="layui-table" lay-skin="line" style="text-align: center;background: #09153D;margin:0px 0px;border:none;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;padding:0px;"><img src="/static/image/icon4.png">排名</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;padding:0px;">分公司</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;padding:0px;">新签业绩</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;padding:0px;">占比集团业绩</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border-color:#fafafa;">
+                        <tr>
+                            <td><img src="/static/image/icon1.png"></td>
+                            <td>{$data['newsort'][0]['name']}</td>
+                            <td>新签</td>
+                            <td>{$data['newsort'][0]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon2.png"></td>
+                            <td>{$data['newsort'][1]['name']}</td>
+                            <td>新签</td>
+                            <td>{$data['newsort'][1]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon3.png"></td>
+                            <td>{$data['newsort'][2]['name']}</td>
+                            <td>新签</td>
+                            <td>{$data['newsort'][2]['zb']}%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-card zz">
+                <div class="layui-card-header">续签签销售排行榜</div>
+                <div class="layui-card-body d">
+                    <table class="layui-table" lay-skin="line" style="text-align: center;background: #09153D;margin:0px 0px;border:none;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;"><img src="/static/image/icon4.png">排名</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">分公司</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">续签业绩</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">占比集团业绩</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border-color:#fafafa;">
+                        <tr>
+                            <td><img src="/static/image/icon1.png"></td>
+                            <td>{$data['xusort'][0]['name']}</td>
+                            <td>续签</td>
+                            <td>{$data['xusort'][0]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon2.png"></td>
+                            <td>{$data['xusort'][1]['name']}</td>
+                            <td>续签</td>
+                            <td>{$data['xusort'][1]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon3.png"></td>
+                            <td>{$data['xusort'][2]['name']}</td>
+                            <td>续签</td>
+                            <td>{$data['xusort'][2]['zb']}%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-card zz">
+                <div class="layui-card-header">P4P销售排行榜</div>
+                <div class="layui-card-body d">
+                    <table class="layui-table" lay-skin="line" style="text-align: center;background: #09153D;margin:0px 0px;border:none;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;"><img src="/static/image/icon4.png">排名</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">分公司</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">引新业绩</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">占比集团业绩</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border-color:#fafafa;">
+                        <tr>
+                            <td><img src="/static/image/icon1.png"></td>
+                            <td>{$data['wangtasksort'][0]['name']}</td>
+                            <td>引新</td>
+                            <td>{$data['wangtasksort'][0]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon2.png"></td>
+                            <td>{$data['wangtasksort'][1]['name']}</td>
+                            <td>引新</td>
+                            <td>{$data['wangtasksort'][1]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon3.png"></td>
+                            <td>{$data['wangtasksort'][2]['name']}</td>
+                            <td>引新</td>
+                            <td>{$data['wangtasksort'][2]['zb']}%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-card zz">
+                <div class="layui-card-header">网销宝销售排行榜</div>
+                <div class="layui-card-body d">
+                    <table class="layui-table" lay-skin="line" style="text-align: center;background: #09153D;margin:0px 0px;border:none;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;"><img src="/static/image/icon4.png">排名</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">分公司</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">新签业绩</th>
+                            <th style="text-align: center;color: #4381E6;background: #09153D;">占比集团业绩</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border-color:#fafafa;">
+                        <tr>
+                            <td><img src="/static/image/icon1.png"></td>
+                            <td>{$data['daitasksort'][0]['name']}</td>
+                            <td>新签</td>
+                            <td>{$data['daitasksort'][0]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon2.png"></td>
+                            <td>{$data['daitasksort'][1]['name']}</td>
+                            <td>新签</td>
+                            <td>{$data['daitasksort'][1]['zb']}%</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/static/image/icon3.png"></td>
+                            <td>{$data['daitasksort'][2]['name']}</td>
+                            <td>新签</td>
+                            <td>{$data['daitasksort'][2]['zb']}%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    function time(){
+        var date =  new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        hours = date.getHours();
+        minutes = date.getMinutes();
+        seconds = date.getSeconds();
+        month=month<10?"0"+month:month;
+        day=day<10?"0"+day:day;
+        hours=hours<10?"0"+hours:hours;
+        minutes=minutes<10?"0"+minutes:minutes;
+        seconds=seconds<10?"0"+seconds:seconds;
+        vWeek_s = date.getDay();
+        document.getElementById("time").innerHTML = '当前时间:'+year + "-" + month + "-" + day + "" + "\t" + hours + ":" + minutes +":" + seconds
+    };
+    setInterval("time()",1000);
+
+</script>
+<script type="text/javascript">
+    chart1({$data['newdayover']},{$data['newmonthover']},{$data['newseasonover']},{$data['newseasonto']});
+    line1({$data['newyear'][0]},{$data['newyear'][1]},{$data['newyear'][2]},{$data['newyear'][3]},{$data['newyear'][4]},{$data['newyear'][5]},{$data['newyear'][6]},{$data['newyear'][7]},{$data['newyear'][8]},{$data['newyear'][9]},{$data['newyear'][10]},{$data['newyear'][11]});
+    line({$data['xulv'][0]},{$data['xulv'][1]},{$data['xulv'][2]},{$data['xulv'][3]},{$data['xulv'][4]},{$data['xulv'][5]},{$data['xulv'][6]},{$data['xulv'][7]},{$data['xulv'][8]},{$data['xulv'][9]},{$data['xulv'][10]},{$data['xulv'][11]});
+    huan({$data['xm']},{$data['xm1']},{$data['xm2']},{$data['xm3']});
+    zhu({$data['yy']},{$data['daiz'][0]},{$data['daiz'][1]},{$data['daiz'][2]},{$data['daiz'][3]},{$data['daiz'][4]},{$data['daiz'][5]});
+    zhu2({$data['dnp4p']},{$data['dxp4p']},{$data['mp4p']},{$data['mxp4p']});
+</script>
+<script>
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            , width: '1050px' //设置容器宽度
+            , height: '880px' //设置容器高度
+            // , full:'true' //是否全屏轮播,默认false
+            // , arrow: 'always' //始终显示箭头和点击按钮
+            // ,anim: 'updown' //切换动画方式，可从各个方向滚动
+        });
+    });
+</script>
+<script>
+    window.onload=function(){
+        setInterval("changeImg()",30000);
+    }
+    var i=0;
+    function changeImg(){
+        i++;
+        if(i==1){
+            //var urls="http://www.pro.com/index/task/hd";
+            var city="石家庄";
+            var bran=1;
+        }else if(i==2){
+            var city="邯郸";
+            var bran=2;
+            //var urls="http://www.pro.com/index/task/hs";
+        }else if(i==3) {
+            var city="衡水";
+            var bran=3;
+            //var urls="http://www.pro.com/index/task/sjz1";
+        }else if(i==4){
+            var city="沧州";
+            var bran=4;
+        }else if(i==5){
+            var city="廊坊";
+            var bran=5;
+        }else if(i==6){
+            var city="保定";
+            var bran=6;
+        }else if(i==7){
+            var city="白沟";
+            var bran=7;
+        }else if(i==8){
+            var city="邢台";
+            var bran=8;
+        }else if(i==9){
+            var city="西安";
+            var bran=9;
+        }else{
+            i=0;
+            changeImg()
+        }
+        $.ajax({
+            url:"{:url('Task/hs')}",
+            type:"post",
+            dataType:"json",
+            data:{city:city,bran:bran},
+            success:function(data){
+                if (data) {
+                    $('#qiehuan').empty();
+                    $('#qiehuan').html(data)
+                }
+            }
+        })
+
+    }
+</script>

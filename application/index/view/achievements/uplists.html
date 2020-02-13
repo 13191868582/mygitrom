@@ -1,0 +1,131 @@
+{include file="public/header"/}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>业绩订单录入</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <input type="hidden" name="per_id" value="{$data.per_id}">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color: #ff1c1a">阿里订单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_aliorder" lay-verify="required" lay-reqtext="" value="{$data.per_aliorder}" placeholder="请输入阿里订单号" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color: #ff1c1a">阿里用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_aliname" lay-verify="required" lay-reqtext="" value="{$data.per_aliname}" placeholder="请输入阿里用户名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color:#ff1c1a">到单时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="per_daotime" id="date" lay-verify="date" placeholder="yyyy-MM-dd" value="{$data['per_daotime']|date='Y-m-d',###}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color:#ff1c1a">公司名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_cname"  lay-reqtext=""  autocomplete="off" class="layui-input" value="{$data.per_cname}" placeholder="请输入公司名称">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单类型</label>
+                <div class="layui-input-block">
+                    {if $data.per_type==1}
+                    <input type="text"  style="cursor:not-allowed" disabled lay-reqtext=""  autocomplete="off" class="layui-input" value="诚信通">
+                    {elseif $data.per_type==2/}
+                    <input type="text"  style="cursor:not-allowed" disabled lay-reqtext=""  autocomplete="off" class="layui-input" value="网销宝">
+                    {elseif $data.per_type==3/}
+                    <input type="text"  style="cursor:not-allowed" disabled lay-reqtext=""  autocomplete="off" class="layui-input" value="建站服务包">
+                    {elseif $data.per_type==4/}
+                    <input type="text"  style="cursor:not-allowed" disabled lay-reqtext=""  autocomplete="off" class="layui-input" value="运营包">
+                    {elseif $data.per_type==5/}
+                    <input type="text"  style="cursor:not-allowed" disabled lay-reqtext=""  autocomplete="off" class="layui-input" value="大泽ERP">
+                    {/if}
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color:#ff1c1a">应收金额</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_amount" lay-verify="required" autocomplete="off"  value="{$data.per_amount}" class="layui-input">
+               </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color:#ff1c1a">实收金额</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per_amounted" lay-verify="required" autocomplete="off" value="{$data.per_amounted}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单状态</label>
+                <div class="layui-input-block">
+                     {if $data.per_status==0}
+                    <input type="text"  lay-reqtext="" style="cursor:not-allowed" disabled autocomplete="off" class="layui-input" value="未处理">
+                    {elseif $data.per_status==2/}
+                    <input type="text"  lay-reqtext="" style="cursor:not-allowed" disabled autocomplete="off" class="layui-input" value="总监拒绝">
+                    {elseif $data.per_status==4/}
+                    <input type="text"  lay-reqtext="" style="cursor:not-allowed" disabled autocomplete="off" class="layui-input" value="财务拒绝">
+                    {/if}
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="de">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#date',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#date1',
+            // value:new Date()
+        });
+    });
+</script>
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(de)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                url:"{:url('Achievements/uplists')}",
+                type:"POST",
+                dataType:"json",
+                data:data.field,
+                success:function(data){
+                    if(data.code==200){
+                        layer.msg("修改成功！",{icon:1,time:1600},function(){
+                            window.location.href="{:url('Achievements/perlists')}";
+                        });
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:1600});
+                    }
+                },
+                error:function(jqXHR){
+                    layer.msg("发生错误："+ jqXHR.status);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{include file="public/footer"/}

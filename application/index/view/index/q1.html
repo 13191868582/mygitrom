@@ -1,0 +1,74 @@
+<div style="width:100%;height:600px;" id="tihuan">
+    {volist name="month" id="vo"}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="br_img">
+                        {if $vo.h_branch_photo!=""}
+                        <img src="{$vo.h_branch_photo}">
+                        {else/}
+                        <img src="/static/index/header.png">
+                        {/if}
+                        <table class="layui-table" border="0">
+                            <tr>
+                                <td style="border-top:none;border-left:none;">评选时间<br><span style="color:red">
+                                    {if isset($vo['h_season'])}
+                                    {$vo['h_season']}
+                                    {elseif isset($vo['h_halfyear'])}
+                                    {$vo['h_halfyear']}
+                                    {elseif isset($vo['h_year'])}
+                                    {$vo['h_year']}年
+                                    {/if}
+                        </span></td>
+                                <td style="border-top:none;border-right:none;">分公司名称<br><span>{$vo.h_branch|branch}</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"style="border-bottom:none;border-left:none;">
+                                    董事长寄语:
+                                    {$vo.h_chairman_message}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="br_cavas">
+                        <div style=""></div>
+                        <div class="br_img">
+                            {if $vo.h_team_photo!=""}
+                            <img src="{$vo.h_team_photo}">
+                            {else/}
+                            <img src="/static/index/header.png">
+                            {/if}
+                            <table class="layui-table" border="0">
+                                <tr>
+                                    <td style="border-left:none;border-top:none;border-right:none;" colspan="2">名次<br><span style="color:red">
+                          {if $vo.ranking==1}
+                          第一名
+                          {elseif $vo.ranking==2/}
+                          第二名
+                          {elseif $vo.ranking==3/}
+                          第三名
+                          {/if}
+                        </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"style="border-bottom:none;border-left:none;">
+                                        入选理由:
+                                        {$vo.h_chairman_message}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/volist}
+</div>

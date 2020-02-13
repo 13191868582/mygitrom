@@ -1,0 +1,41 @@
+{include file="public/header"/}
+<style type="text/css">
+  div span{
+    margin-left: 180px;
+    font-size: 20px;
+  }
+  div p{
+        margin-left: 280px;
+      font-size: 50px;
+  }
+</style>
+<div class="layui-body">
+  <div>
+    <span>商品名称:</span> 
+    <p>{$good['goods_name']}</p>
+  </div>
+  <div>
+    <span>商品价格:</span> 
+    <p>{$good['price']}豆币</p>
+  </div>
+  <div>
+    <span>商品图:</span> 
+    <p><img src="{$good['goods_pic']}"></p>
+  </div>
+  <div>
+    <span>商品详情:</span> 
+    <div>{$good['content']}</div>
+  </div>    
+          
+  <div style="padding-left:35px;">
+    <a href="/index/goods/buy?id={$good.id}" style="    margin-left: 300px;">
+      <button type="button" class="layui-btn layui-btn-danger">
+        立即购买
+      </button>
+    </a>
+  </div>
+        
+    
+</div>
+</script>
+{include file="public/footer"/}

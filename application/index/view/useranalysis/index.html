@@ -1,0 +1,106 @@
+{include file="public/header"/}
+<div class="layui-body">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>用户体质分析看板</legend>
+    </fieldset>
+	<form class="layui-form" action="{:url('Useranalysis/sel')}" method="get">
+		<div class="layui-inline">
+	      <div class="layui-input-inline">
+	        <select name="industry1" id="industry1"  lay-filter="industry1">
+	          <option value="0">请选择公司</option>
+	          {volist name="company" id="list"}
+	          <option value="{$list.id}">{$list.name}</option>
+	          {/volist}
+	        </select>
+	      </div>
+	       <div class="layui-input-inline">
+	      <select name="industry2" id="industry2" lay-filter="industry2">
+	        <option value="">请选择员工</option>
+	      </select>
+	    </div>
+	    </div>
+
+
+
+     	<div class="layui-form-item">
+    		<label class="layui-form-label">客户信息</label>
+    		<div class="layui-input-block">
+      			<input type="checkbox" name="aliname" value="aliname" checked title="阿里用户名">
+      			<input type="checkbox" name="a_level" value="a_level" checked title="A等级">
+      			<input type="checkbox" name="products" value="products" title="主营产品">
+      			<input type="checkbox" name="hangye" value="hangye" title="行业分类">
+      			<input type="checkbox" name="ali_app" value="ali_app" title="阿里APP">
+      			<input type="checkbox" name="wp_score" value="wp_score" title="旺铺评分">
+      			<input type="checkbox" name="violation_record" value="violation_record" title="违规记录">
+      			<input type="checkbox" name="five_offer" value="five_offer" title="五星offer">
+      			<input type="checkbox" name="seven_offer" value="seven_offer" title="七星offer">
+      			<input type="checkbox" name="strength_businessmen" value="strength_businessmen" title="是否实商">
+				<input type="checkbox" name="p4p" value="p4p" title="P4P">
+				<input type="checkbox" name="p4p_consume" value="p4p_consume" title="30天P4P消耗">
+				<input type="checkbox" name="buy_insurance" value="buy_insurance" title="是否开通买宝">
+				<input type="checkbox" name="current_level" value="current_level" title="当前层级">
+				<input type="checkbox" name="shop_status" value="shop_status" title="店铺托管">
+				<input type="checkbox" name="auto_activities" value="auto_activities" title="参与网店活动">
+				<input type="checkbox" name="c_type" value="c_type" title="是否过期">
+     		</div>
+  		</div>
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">其他信息</label>
+    		<div class="layui-input-block">
+    			<input type="checkbox" name="corporate_name" value="corporate_name" title="公司名称">
+    			<input type="checkbox" name="company_address" value="company_address" title="公司地址">
+    			<input type="checkbox" name="company_personnel" value="company_personnel" title="员工数量">
+    			<input type="checkbox" name="importance" value="importance" title="电商重视程度">
+    			<input type="checkbox" name="22" value="123" disabled="disabled" title="月营业额">
+    			<input type="checkbox" name="annual_profit" value="annual_profit" title="年营业额">
+    			<input type="checkbox" name="y_turnover" value="y_turnover" title="上年营业额">
+    			<input type="checkbox" name="public_number" value="public_number" title="公众号">
+    			<input type="checkbox" name="integrity_level" value="integrity_level" title="企业诚信等级">
+    			<input type="checkbox" name="old_signsale" value="old_signsale" title="原签单销售">
+    			<input type="checkbox" name="old_p4p" value="old_p4p" title="原P4P">
+    			<input type="checkbox" name="old_p4pconsume" value="old_p4pconsume" title="原P4P消耗客服">
+    			<input type="checkbox" name="tp_date" value="tp_date" disabled title="TP年限">
+    			<input type="checkbox" name="brank" value="brank" title="客户所属分公司">
+    			<input type="checkbox" name="kefu" value="kefu" disabled title="客户所属客服人">
+    		</div>
+  		</div>
+
+  		<button class="layui-btn" lay-submit="" id="searchBtn" data-type="getInfo">搜索</button>
+	</form>
+</div>
+
+<script type="text/javascript">
+    layui.use('form', function(){
+    var form = layui.form;
+      form.on('select(industry1)',function(data){
+                    var fid=data.value;
+                    console.log(fid);
+                    $.ajax({
+                        url: "{:url('Useranalysis/userLists')}",//请求地址
+                        type: "POST",//请求方式
+                        dataType: "JSON",//返回数据类型
+                        data: {fid:fid},//发送的参数
+                        success:function(data){
+                            var re=data.data;
+                            // console.log(data);
+                            $('#industry2 option').hide();
+                            var proHtml = '';
+                            proHtml += '<option value="0">请选择员工</option>';
+                            for(var i=0;i<data.data.length;i++){
+                              proHtml += '<option value="'+re[i].id+'">'+re[i].username+'</option>';
+                            }
+                            $('#industry2').html(proHtml);
+                            form.render();  
+
+                        },
+                        error:function(){
+                            //失败执行的方法
+                            alert("error");
+                        }
+                    })
+ 
+             })
+    })
+  </script>
+
+{include file="public/footer"/}

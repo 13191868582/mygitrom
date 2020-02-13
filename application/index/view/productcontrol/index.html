@@ -1,0 +1,298 @@
+{include file="public/header"/}
+<style>
+    *{padding:0px;margin:0px;}
+    .pop {  display: none;  width: 600px; min-height: 470px;  max-height: 750px;  height:470px;  position:fixed;  top: 0;  left: 0;  bottom: 0;  right: 0;  margin: auto;  padding: 25px;  z-index: 130;  border-radius: 8px;  background-color: #fff;  box-shadow: 0 3px 18px rgba(100, 0, 0, .5);  }
+    .pop-top{  height:40px;  width:100%;  border-bottom: 1px #E5E5E5 solid;  }
+    .pop-top h2{  float: left;  display:black}
+    .pop-top span{  float: right;  cursor: pointer;  font-weight: bold; display:black}
+    .pop-foot{  height:50px;  line-height:50px;  width:100%;  border-top: 1px #E5E5E5 solid;  text-align: right;  }
+    .pop-cancel, .pop-ok {  padding:8px 15px;  margin:15px 5px;  border: none;  border-radius: 5px;  background-color: #337AB7;  color: #fff;  cursor:pointer;  }
+    .pop-cancel {  background-color: #FFF;  border:1px #CECECE solid;  color: #000;  }
+    .pop-content{  height: 380px;  }
+    .pop-content-left{  float: left;  }
+    select{    height: 30px;}
+    .pop-content-right{  width:310px;  float: left;  padding-top:20px;  padding-left:20px;  font-size: 16px;  line-height:35px;  }
+    .bgPop{  display: none;  position: absolute;  z-index: 129;  left: 0;  top: 0;  width: 100%;  height: 100%;  background: rgba(0,0,0,.2);  }
+</style>
+<div class="layui-body">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>品控工作台</legend>
+    </fieldset>
+    <form  class="layui-form"  action="{:url('Productcontrol/index')}" method="get">
+        <div class="layui-inline">
+            <label class="layui-form-label">按地区查询</label>
+            <div class="layui-input-block">
+                <select name="id" lay-filter="aihao">
+                    <option value=""></option>
+                    {volist name="branch" id="list"}
+                    <option {if condition=" $id == $list['id']"}selected{/if} value="{$list['id']}">{$list['name']}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">按时间查找</label>
+            <div class="layui-input-inline">
+                <input type="text" name="start" {if condition="!empty($start)"}value="{$start}"{/if} id="start" lay-verify="start" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="end" {if condition="!empty($end)"}value="{$end}"{/if} id="end" lay-verify="end" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">开通/到单</label>
+            <div class="layui-input-block">
+                <select name="type" class="daodan" lay-filter="business" lay-filter="aihao">
+                    <option value=""></option>
+                    <option {if condition="$type === '0'"}selected{/if} value="0">到单</option>
+                    <option {if condition="$type == 1"}selected{/if} value="1">开通</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">业务线</label>
+            <div class="layui-input-block">
+                <select name="business_type" lay-filter="aihao">
+                    <option value=""></option>
+                    <option {if condition="$business_type == '续签'"}selected{if} value="续签">续签</option>
+                    <option {if condition="$business_type == '新签'"}selected{if} value="新签">新签</option>
+                    <option {if condition="$business_type == '网销宝充值包'"}selected{if} value="网销宝充值包">网销宝</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">所属问题类别</label>
+            <div class="layui-input-block">
+                <select name="p_type" lay-filter="aihao">
+                    <option value=""></option>
+                    {volist name="problem" id="list"}
+                    <option {if condition="$p_type == $list['id']"}selected{/if} value="{$list['id']}">{$list['problem']}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+
+        <button   class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon" >搜索</i></button>
+        <a class="layui-btn" lay-submit lay-filter="login">导出</a>
+    </form>
+
+
+    <div class="layui-form">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>区域</th>
+                <th>阿里ID</th>
+                <th>公司名称</th>
+                <th>到单/开通</th>
+                <th>业务线</th>
+                <th>通过时间</th>
+                <th>签单人</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                {volist name="result" id="list"}
+                    <tr>
+                        <th>{$list['name']}</th>
+                        <th>{$list['aliname']}</th>
+                        <th>{$list['company']}</th>
+                        <th>
+                            {if condition="$list['type'] == 1"}
+                            开通
+                            {else /}
+                            到单
+                            {/if}
+                        </th>
+                        <th>{$list['business_type']}</th>
+                        <th>{$list['sendover_time']|date='Y-m-d H:i:s',###}</th>
+                        <th>{$list['sales']}</th>
+                        <th>
+                            {if condition="$list['static'] == 0"}
+                            <button value="{$list['id']}" type="button" class="layui-btn layui-btn-normal click_pop">品控问题</button>
+                            <button value="{$list['id']}" type="button" class="layui-btn layui-btn-normal adopt">核查通过</button>
+                            {/if}
+                            {if condition="$list['static'] == 1"}
+                            <p>已处理</p>
+                            {/if}
+                            {if condition="$list['static'] == 4"}
+                            <p>审核中</p>
+                            {/if}
+                        </th>
+                    </tr>
+
+                {/volist}
+            </tbody>
+        </table>
+        {$result->render()}
+    </div>
+    <div class="pop">
+        <div class="pop-top">
+            <h2>品控问题</h2>
+            <span class="pop-close">Ｘ</span>
+        </div>
+        <div class="pop-content">
+            <div class="pop-content-left">
+                <img src="" alt="" class="teathumb">
+            </div>
+            <div class="pop-content-right">
+                <p>区域：<b class="lname"></b></p>
+                <p style="width: 500px;">品控问题：
+                    <select name="p_type" id="p_type" lay-verify="required" lay-search="">
+                        <option value="">选择品控问题</option>
+                        {volist name="problem" id="list"}
+                        <option value="{$list['id']}">{$list['problem']}</option>
+                        {/volist}
+                    </select>
+                    <a href="{:url('index/productcontrol/problems')}" class="layui-btn layui-btn-normal">品控问题管理</a>
+                </p>
+
+
+
+                <p>M4或主管：<span class="ltime"></span></p>
+                <p>
+                    备注
+                    <textarea id="l_result" style="resize:none;margin: 0px; height: 200px;width: 559px;"></textarea>
+                </p>
+            </div>
+        </div>
+        <div class="pop-foot">
+            <input type="button" value="关闭" class="pop-cancel pop-close">
+            <input type="button" value="提交" class="pop-ok">
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    $(function  () {
+        layui.use('form', function(){
+            var form = layui.form;
+            //监听提交
+            form.on('submit(login)', function(data){
+                console.log(data.field)
+                window.location.href="export?id="+data.field.id+"&start="+data.field.start+"&end="+data.field.end+"&type="+data.field.type+"&business_type="+data.field.business_type+"&p_type="+data.field.p_type;
+            });
+        });
+    })
+</script>
+
+
+<script>
+    $('.click_pop').click(function () {
+        var id = $(this).val();
+        $.ajax({
+            url: "{:url('Productcontrol/problem')}",//请求地址
+            type: "POST",//请求方式
+            dataType: "JSON",//返回数据类型
+            data: {id:id},
+            success:function(res){
+                var branch = res.branch;
+                var user = res.user;
+                $('.lname').html(branch['name'])
+                var str = "";
+                str += "<input type='hidden' name='id' value='"+id+"'>"
+                str += "<select name='user_id' id='user_id'>"
+                str += "<option value=''>选择M4或主管</option>"
+                for (var i=0;i<user.length;i++) {
+                    str += "<option value='"+user[i]['id']+"'>"+user[i]['username']+"</option>"
+                }
+                str += "</select>"
+
+                $('.ltime').html(str);
+                $('.bgPop,.pop').show();
+            }
+        })
+
+        $('.pop-close').click(function () {
+            $('.bgPop,.pop').hide();
+            history.go(0)
+        });
+
+
+
+    })
+
+</script>
+<script>
+    $(function(){
+        $('.pop-ok').click(function(){
+            var id = $('input[name="id"]').val();
+            var p_type = $('#p_type option:selected') .val();
+            var user_id = $('#user_id option:selected') .val();
+            var remark = $('#l_result').val();
+            if (!user_id || !p_type){
+                if (!user_id){
+                    alert('选择M4或者主管');
+                }
+                if (!p_type){
+                    alert('选择品控问题');
+                }
+
+            }else{
+                $.ajax({
+                    url: "{:url('Productcontrol/through')}",//请求地址
+                    type: "POST",//请求方式
+                    dataType: "JSON",//返回数据类型
+                    data: {id:id,p_type:p_type,user_id:user_id,remark:remark},
+                    success:function(res){
+                        if (res){
+                            alert('提交成功')
+                            $('.bgPop,.pop').hide();
+                            history.go(0)
+                        }else{
+                            alert('提交失败,刷新重新提交')
+                        }
+                    }
+                })
+            }
+
+
+
+        })
+    })
+
+</script>
+<script>
+    $(function(){
+        $('.adopt').click(function(){
+            var id = $(this).val();
+            $.ajax({
+                url: "{:url('Productcontrol/adopt')}",//请求地址
+                type: "POST",//请求方式
+                dataType: "JSON",//返回数据类型
+                data: {id:id},
+                success:function(res){
+                    if (res['code'] == 0){
+                        alert(res['msg']);
+                        window.location.reload()
+                    }
+                    if (res['code'] == 1) {
+                        alert(res['msg']);
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#start',
+            // value:new Date()
+        });
+        laydate.render({
+            elem: '#end',
+            // value:new Date()
+        });
+    });
+</script>
+
+
+{include file="public/footer"/}

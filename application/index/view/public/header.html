@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆智慧云企业管理系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <a href="/"><div class="layui-logo">银豆豆智慧云</div></a>
+
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="{:url('goods/shoplist')}" style="color:red;font-size:25px;font-weight:bold">豆豆商城</a></li>
+    </ul>
+
+    <ul class="layui-nav layui-layout-right">
+       <li class="layui-nav-item"><a href="">{$Think.session.user.department|department}</a></li>
+<!--        <li class="layui-nav-item"><a href="">{$Think.session.user.rank|rank}{if $Think.session.admin.username}超级管理员{/if}</a></li>-->
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="/static/logo/logo.png" class="layui-nav-img">
+          {$Think.session.user.username}
+        </a>
+         <dl class="layui-nav-child">
+         
+           {if $Think.session.user.id}
+          <dd><a href="{:url('Index/password')}?id={$Think.session.user.id}">修改密码</a></dd>
+          <dd><a href="{:url('Index/beanlist')}?id={$Think.session.user.id}">我的豆币</a></dd>
+          {else/}
+          <dd><a href="{:url('Index/password1')}?id={$Think.session.admin.id}">修改密码</a></dd>
+          {/if}
+          
+          <dd><a href="{:url('login/logout')}">退出</a></dd>
+        </dl>
+      </li>
+      <!-- <li class="layui-nav-item"><a href="{:url('login/logout')}">退了</a></li> -->
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        {foreach name="rolecommon" item="listop" key="k"}
+        <li class="layui-nav-item">
+          <a class="" href="javascript:;">{$k|auth1}</a>
+            <dl class="layui-nav-child">
+              {php}foreach($listop[0] as $vop){{/php}
+              <dd><a href="/{$vop['title']}">{$vop['name']}</a></dd>
+             {php} }{/php}
+            </dl>
+        </li>
+        {/foreach}
+      </ul>
+    </div>
+  </div>

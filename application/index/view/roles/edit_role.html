@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+</head>
+<body class="layui-layout-body">
+      <form class="layui-form" action="">
+      <div class="layui-form-item">
+      <label class="layui-form-label">角色名称</label>
+      <div class="layui-input-inline">
+      <input type="hidden" name="did" value="{$res.id}">
+      <input type="text" name="title" lay-verify="title" autocomplete="off" value="{$res.title}" placeholder="请输入名称" class="layui-input">
+      </div>
+      </div>
+      <div class="layui-form-item">
+      <label class="layui-form-label">状态</label>
+      <div class="layui-input-block">
+      <input type="radio" name="status" value="1" {if $res.status eq 1} checked {/if} title="启用">
+      <input type="radio" name="status" value="2" {if $res.status eq 2} checked {/if} title="禁用">
+      </div>
+      </div>
+      <div class="layui-form-item">
+      <div class="layui-input-block">
+      <button class="layui-btn" lay-submit="" lay-filter="edit_role">确认提交</button>
+      </div>
+      </div>
+</form>
+<script type="text/javascript">
+layui.use('form', function(){
+  var form = layui.form;
+    form.on('submit(edit_role)', function(data){
+    //layer.msg(JSON.stringify(data.field));
+   $.ajax({
+        url:"/index/Roles/doEdit",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+                 parent.location.reload();
+    });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+});
+  return false;
+});
+});
+</script>
+ </body>
+ </html>

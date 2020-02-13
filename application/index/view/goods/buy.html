@@ -1,0 +1,96 @@
+{include file="public/header"/}
+	 <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">           
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>完善订单信息</legend>
+</fieldset>
+<form class="layui-form" action="">
+   <div class="layui-form-item">
+    <label class="layui-form-label">订单号</label>
+    <div class="layui-input-inline">
+      <input type="text" name="ordernum" lay-verify="title" autocomplete="off" placeholder="请输入订单号" class="layui-input" value="{$data.createOrderNum}" readonly="readonly">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品名称</label>
+    <div class="layui-input-inline">
+      <input type="text" name="goods_name" lay-verify="title" autocomplete="off" placeholder="请输入商品名称" class="layui-input" value="{$data.goods_name}" readonly="readonly">
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">花费豆币</label>
+    <div class="layui-input-inline">
+      <input type="text" name="price" lay-verify="title" autocomplete="off" placeholder="豆币" class="layui-input" value="{$data.price}" readonly="readonly">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">地址信息</label>
+    <div class="layui-input-inline">
+      <input type="text" name="address" lay-verify="title" autocomplete="off" placeholder="地址信息" class="layui-input" >
+    </div>
+  </div>
+  <div class="layui-upload" style="margin-left:100px">
+	  <div class="layui-upload-list">
+	    <img class="layui-upload-img" id="demo2">
+	    <p id="demoText"></p>
+	  </div>
+</div> 
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit="" lay-filter="demos">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+    </div>
+  </div>
+  <script type="text/javascript">
+    layui.use('element', function(){
+      var element = layui.element;
+  
+  });
+  layui.use('form', function(){
+  var form = layui.form;
+  //监听提交
+  form.on('submit(demos)', function(data){
+    layer.msg(JSON.stringify(data.field));
+
+  $.ajax({
+        url:"{:url('goods/tobuy')}",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+           if(data.code==200){
+               layer.msg("添加成功！",{icon:1,time:1600},function(){
+               window.location.href="{:url('goods/shoplist')}";
+      });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+});
+  return false;
+});
+//自定义验证规则
+  form.verify({
+    title: function(value){
+      if(value.length < 1){
+        return '内容不能为空！';
+      }
+    }
+    ,pass: [
+      /^[\S]{6,12}$/
+      ,'密码必须6到12位，且不能出现空格'
+    ]
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+});
+</script>
+{include file="public/footer"/}

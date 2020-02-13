@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)http://www.quanfangke.com/index.php?s=/Admin/Login/index.html -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>河北银豆豆智慧云企业管理</title>
+
+    {load href="/static/logo/common_1.0.css"/}
+    {load href="/static/logo/style_1.0.css"/}
+    {load href="/static/logo/jquery-1.10.2.min.js"/}
+    {load href="/static/logo/layer.js"/}
+    {load href="/static/logo/layer.css"/}
+    {load href="/static/layui/css/layui.css"/}
+    <script src="https://g.alicdn.com/dingding/dinglogin/0.0.5/ddLogin.js"></script>
+    <script>
+        window.onload = function () {
+        var obj = DDLogin({
+         id:"login_container",//这里需要你在自己的页面定义一个HTML标签并设置id，例如<div id="login_container"></div>或<span id="login_container"></span>
+         goto: encodeURIComponent("https://oapi.dingtalk.com/connect/qrconnect?appid=dingoa7k6t5fbeuiwy3sas&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=https://www.xh2008.cn/index.php/index/login/logined.html"), //请参考注释里的方式
+         style: "border:none;background-color:#FFFFFF;",
+         width : "260",
+         height: "400"
+     });
+}</script>
+    <meta name="__hash__" content="554911fbb78389441b0e4425faccf71f_85c045cd9e2a5e0112e7b903ac586750">
+
+</head>
+
+<body style="">
+<div id="container">
+    <div id="content" class="container__main clear">
+        <div class="container__right " style="min-height: 40px">
+            <div class="backImg">
+                <div class="container__header">
+                    <div class="container__main header clearfix">
+                        <a href="" class="header__img"><img src="__STATIC__/logo/logo.png" alt=""></a>
+                        <div class="header__line"></div>
+                        <a href="" class="header__content">河北银豆豆智慧云企业管理系统</a>
+                    </div>
+                </div>
+            <div class="login-wrap">
+                <div class="layui-tab">
+                  <ul class="layui-tab-title">
+                    <li class="layui-this">扫码登陆</li>
+                    <!-- <li>账号密码</li> -->
+                  </ul>
+                  <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show" id="login_container"></div>
+                    <div class="layui-tab-item">
+                     <div class="login-title">欢迎登入</div>
+                    <div>
+                        <div class="login-name login-item">
+                            <i class="iconfont login-name__icon"></i>
+                            <input name="username" id="username"type="text" class="txt username"
+                                   placeholder="请输入账号">
+                        </div>
+                        <div class="login-password login-item">
+                            <i class="iconfont login-password__icon"></i>
+                            <input name="password" id="password" type="password" autocomplete="new-password"
+                                   class="txt password" placeholder="请输入密码">
+                        </div>
+
+                        <span class="error-tip error-hidden">用户名或密码错误,请重新输入</span>
+                        <input class="login-submit" id="login" type="button" value="登录">
+                        <input type="hidden" name="__hash__"
+                               value="554911fbb78389441b0e4425faccf71f_85c045cd9e2a5e0112e7b903ac586750">
+                    </div>
+                    <div class="login-tips">
+                        <div class="tel-tip">
+
+                        </div>
+
+                    </div>
+                    </div>
+                    
+                  </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="footer">
+            <div class="copyrights">CopyRight © 2019 河北银豆豆信息技术服务有限公司 All Rights Reserved<a
+                    href="http://www.miit.gov.cn/">冀ICP备18030735号-2</a></div>
+        </div>
+    </div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script>
+    var name_ok  = false;
+    var pwd_ok = false;
+    $("#username").blur(function() {
+        if($(this).val()==""){
+            name_ok  = false;
+        }else{
+            name_ok  = true;
+        }
+    });
+    $("#password").blur(function() {
+        if($(this).val()==""){
+            pwd_ok = false;
+        }else{
+            pwd_ok = true;
+        }
+    });
+    $("#login").click(function() {
+        if(name_ok&&pwd_ok){
+            //判断用户名 密码是否填写
+            var username = $("#username").val();
+            var password = $("#password").val();
+            //
+            $.post("{:url('login/login')}",{"username":username,"password":password},function(data) {
+                if(data.ok){
+                    layer.msg(data.msg,{icon:1});
+                    setTimeout("window.location='/index/Index/index.html'",1000);
+                }else{
+                    layer.msg(data.msg,{icon:2});
+                }
+            },"json");
+        }else{
+            layer.msg("此账号不能为空");
+        }
+    });
+
+    /*
+* 解释一下goto参数，参考以下例子：
+* var url = encodeURIComponent('http://localhost.me/index.php?test=1&aa=2');
+* var goto = encodeURIComponent('https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=appid&response_type=code&scope=snsapi_login&state=STATE&redirect_uri='+url)
+*/
+
+
+var hanndleMessage = function (event) {
+        var origin = event.origin;
+        console.log("origin", event.origin);
+        if( origin == "https://login.dingtalk.com" ) { //判断是否来自ddLogin扫码事件。
+            var loginTmpCode = event.data; //拿到loginTmpCode后就可以在这里构造跳转链接进行跳转了
+            console.log(loginTmpCode);
+　　　　　　　window.location.href="https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoa7k6t5fbeuiwy3sas&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=https://www.xh2008.cn/index.php/index/login/logined.html&loginTmpCode="+loginTmpCode
+} }; 
+if (typeof window.addEventListener != 'undefined') { window.addEventListener('message', hanndleMessage, false); } else if (typeof window.attachEvent != 'undefined') { window.attachEvent('onmessage', hanndleMessage); }
+</script>
+
+</body>
+
+</html>

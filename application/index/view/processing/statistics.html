@@ -1,0 +1,63 @@
+{include file="public/header"/}
+<div class="layui-body">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>品控统计</legend>
+    </fieldset>
+    <div class="layui-form-item">
+        <a href="{:url('index/processing/statistics')}" style="margin-left: 75%;border: 1px solid #1fd4e6;" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius">工作指数</a>
+        <a href="{:url('index/processing/Statistics_index')}" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius">统计指数</a>
+    </div>
+
+    <div class="layui-form">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>区域</th>
+                <th>姓名</th>
+                <th>本日处理项</th>
+                <th>本日应处理项</th>
+                <th>本日处理率</th>
+                <th>本月处理项</th>
+                <th>本月应处理项</th>
+                <th>本月处理率</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="result" id="list"}
+            <tr>
+                <th>{$list['name']}</th>
+                <th>
+                    {if condition="$list['id'] == 3 || $list['id'] == 4 || $list['id'] == 1 || $list['id'] == 6"}
+                    冯尧
+                    {/if}
+                    {if condition="$list['id'] == 2 || $list['id'] == 5 || $list['id'] == 7 || $list['id'] == 8 || $list['id'] == 9"}
+                    郑玉杰
+                    {/if}
+                </th>
+                <th>{$list['d_complete']}</th>
+                <th>{$list['day']}</th>
+                <th>
+                    {if condition="$list['day'] == 0"}
+                    ---
+                    {else /}
+                    {$list['d_complete']/$list['day']*100|round=###,2}%
+                    {/if}
+                </th>
+                <th>{$list['m_complete']}</th>
+                <th>{$list['month']}</th>
+                <th>
+                    {if condition="$list['month'] == 0"}
+                    ---
+                    {else /}
+                    {$list['m_complete']/$list['month']*100|round=###,2}%
+                    {/if}
+                </th>
+            </tr>
+
+            {/volist}
+            </tbody>
+        </table>
+    </div>
+</div>
+{include file="public/footer"/}

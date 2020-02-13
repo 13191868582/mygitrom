@@ -1,0 +1,359 @@
+{include file="public/header"/}
+{load href="/static/customer/customer.js"/}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>客户信息详情</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <input type="hidden" name="did" value="{$data.id}">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单号</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" disabled required name="order" value="{$data.order}" placeholder="请输入订单号" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户姓名</label><button type="button" onclick="cus_add({$data.id})"  class="layui-btn layui-btn-normal layui-btn-sm">添加负责人</button><button type="button" onclick="cus_list({$data.id})" class="layui-btn layui-btn-normal layui-btn-sm">负责人信息</button>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" disabled required lay-verify="title" autocomplete="off" value="{$data.username}" placeholder="请输入客户姓名" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">阿里用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="aliname" disabled required readonly="readonly" lay-reqtext="用户名是必填项，岂能为空？" value="{$data.aliname}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="age" disabled required lay-verify="title" autocomplete="off" value="{$data.age}" placeholder="请输入年龄" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="moblie" disabled required lay-verify="phone" autocomplete="off" value="{$data.moblie}" placeholder="请输入手机号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">职位</label>
+                <div class="layui-input-inline">
+                    <select name="position" lay-verify="required" lay-search="">
+                        <option value="1" {if $data['position'] eq 1} selected=""{/if}>总经理</option>
+                        <option value="2" {if $data['position'] eq 2} selected=""{/if}>部门负责人</option>
+                        <option value="3" {if $data['position'] eq 3} selected=""{/if}>电商负责人</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">微信</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="weixin" disabled required  value="{$data.weixin}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">QQ</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="qq" disabled required  value="{$data.qq}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">固定电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="telephone"  disabled required value="{$data.telephone}" placeholder="0311-12345678" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">客户等级</label>
+                    <div class="layui-input-inline">
+                        <select name="c_level" lay-verify="required" lay-search="">
+                            <option value="A" {if $data['c_level'] eq 'A'} selected {/if}>A</option>
+                            <option value="B" {if $data['c_level'] eq 'B'} selected {/if}>B</option>
+                            <option value="C" {if $data['c_level'] eq 'C'} selected {/if}>C</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">金额</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="money" value="{$data.money}" disabled required placeholder="续费金额" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">千牛</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="qniu" disabled required  value="{$data.qniu}" placeholder="千牛账号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">主营产品</label>
+                <div class="layui-input-block">
+                    <input type="text" name="products" disabled required  value="{$data.products}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">行业分类</label>
+                <div class="layui-input-inline">
+                    <select name="industry1" lay-filter="industry1">
+                        {volist name="industry" id="list"}
+                        {if $list.pid==0}
+                        <option value="{$list.id}" {if $data.industry1 eq $list.id} selected {/if}>{$list.class_industry}</option>
+                        {/if}
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="industry2" id="industry2" lay-filter="industry2">
+                        <option value="">{$data.industry2|industry2}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">阿里app</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="ali_app" value="1" {if $data['ali_app'] eq 1} checked {/if} title="安装" >
+                    <input type="radio" name="ali_app" value="2" {if $data['ali_app'] eq 2} checked {/if} title="未安装">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机版店铺</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="m_shop" value="1" {if $data['m_shop'] eq 1} checked {/if} title="装修" >
+                    <input type="radio" name="m_shop" value="2" {if $data['m_shop'] eq 2} checked {/if} title="未装修">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">店铺地址</label>
+                <div class="layui-input-block">
+                    <a href="{$data.shop_address}" target="_black"><input type="text" name="shop_address" disabled required value="{$data.shop_address}" autocomplete="off" class="layui-input"></a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">外网地址</label>
+                <div class="layui-input-block">
+                    <a href="{$data.e_address}" target="_black"><input type="text" name="e_address" disabled required  value="{$data.e_address}" autocomplete="off" class="layui-input"></a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">交易勋章</label>
+                    <div class="layui-input-inline">
+                        <select name="trade_medal" lay-verify="required" lay-search="">
+                            <option value="1A" {if $data['c_level'] eq '1A'} selected {/if}>1A</option>
+                            <option value="2A" {if $data['c_level'] eq '2A'} selected {/if}>2A</option>
+                            <option value="3A" {if $data['c_level'] eq '3A'} selected {/if}>3A</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">旺铺评分</label>
+                    <div class="layui-input-inline">
+                        <select name="wp_score" lay-verify="required" lay-search="">
+                            {volist name="score" id="slist"}
+                            <option value="{$slist['id']}" {if $data['wp_score'] eq $slist['id']} selected {/if}>{$slist['score']}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">违规记录</label>
+                <div class="layui-input-block">
+                    <textarea  name="violation_record" disabled required value="" class="layui-textarea">{$data.violation_record}</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">A等级</label>
+                    <div class="layui-input-inline">
+                        <select name="a_level" lay-verify="required" lay-search="">
+                            <option value="1A" {if $data['c_level'] eq '1A'} selected {/if}>1A</option>
+                            <option value="2A" {if $data['c_level'] eq '2A'} selected {/if}>2A</option>
+                            <option value="3A" {if $data['c_level'] eq '3A'} selected {/if}>3A</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">五星offer数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="five_offer" disabled required  placeholder="请输入" value="{$data.five_offer}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">七星offer数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="seven_offer" disabled required  placeholder="请输入" value="{$data.seven_offer}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">实力商家</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="strength_businessmen" value="1" {if $data['strength_businessmen'] eq 1} checked {/if} title="存在" >
+                    <input type="radio" name="strength_businessmen" value="2" {if $data['strength_businessmen'] eq 2} checked {/if} title="不存在">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">p4p签约状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="p4p" value="1" {if $data['p4p'] eq 1} checked {/if} title="存在" >
+                    <input type="radio" name="p4p" value="2" {if $data['p4p'] eq 2} checked {/if} title="不存在">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">p4p消耗值</label>
+                    <div class="layui-input-inline">
+                        <select name="p4p_consume" lay-verify="required" lay-search="">
+                            {volist name="p4p" id="plist"}
+                            <option value="{$plist['id']}" {if $data['p4p_consume'] eq $plist['id']} selected {/if}>{$plist['consume']}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">店铺托管</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="shop_status" value="1" {if $data['shop_status'] eq 1} checked {/if} title="已托管" >
+                    <input type="radio" name="shop_status" value="2" {if $data['shop_status'] eq 2} checked {/if} title="未托管">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">托管信息</label>
+                <div class="layui-input-block">
+                    <textarea  name="managed_information" disabled required value="" class="layui-textarea">{$data.managed_information}</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">参与的网站活动</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="auto_activities" value="1" {if $data['auto_activities'] eq 1} checked {/if} title="自主参加的活动" >
+                    <input type="radio" name="auto_activities" value="2" {if $data['auto_activities'] eq 2} checked {/if} title="网站大促">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">店铺基础包</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="shop_package" value="1" {if $data['shop_package'] eq 1} checked {/if} title="是" >
+                    <input type="radio" name="shop_package" value="2" {if $data['shop_package'] eq 2} checked {/if} title="否">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公司名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="corporate_name" disabled required  value="{$data.corporate_name}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公司地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="company_address" disabled required  value="{$data.company_address}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">员工数量</label>
+                    <div class="layui-input-inline">
+                        <select name="company_personnel" lay-verify="required" lay-search="">
+                            {volist name="enum" id="plist"}
+                            <option value="{$plist['id']}" {if $data['company_personnel'] eq $plist['id']} selected {/if}>{$plist['num']}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">电商重视程度</label>
+                    <div class="layui-input-inline">
+                        <select name="importance" lay-verify="required" lay-search="">
+                            <option value="1" {if $data['importance'] eq 1} selected {/if}>一般</option>
+                            <option value="2" {if $data['importance'] eq 2} selected {/if}>重视</option>
+                            <option value="3" {if $data['importance'] eq 3} selected {/if}>非常重视</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">原签单销售</label>
+                <div class="layui-input-block">
+                    <input type="text" name="old_signsale" disabled required readonly="readonly" value="{$data.old_signsale}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原p4p</label>
+                <div class="layui-input-block">
+                    <input type="text" name="old_p4p" disabled required readonly="readonly"  value="{$data.old_p4p}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原p4p消耗客服</label>
+                <div class="layui-input-block">
+                    <input type="text" name="old_p4pconsume" disabled required readonly="readonly"  value="{$data.old_p4pconsume}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户签单时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sign_date" disabled required readonly="readonly"  value="{$data.sign_date|date='Y-m-d H:i:s',###}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a href="{:url('Finances/renewal')}" class="layui-btn" lay-submit="" lay-filter="customer">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<script type="text/javascript">-->
+    <!--layui.use('form', function(){-->
+        <!--var form = layui.form;-->
+        <!--form.on('select(industry1)',function(data){-->
+            <!--var fid=data.value;-->
+            <!--console.log(fid);-->
+            <!--$.ajax({-->
+                <!--url: "{:url('Customers/industry')}",//请求地址-->
+                <!--type: "POST",//请求方式-->
+                <!--dataType: "JSON",//返回数据类型-->
+                <!--data: {fid:fid},//发送的参数-->
+                <!--success:function(data){-->
+                    <!--var re=data.data;-->
+                    <!--// console.log(data);-->
+                    <!--$('#industry2 option').hide();-->
+                    <!--var proHtml = '';-->
+                    <!--for(var i=0;i<data.data.length;i++){-->
+                        <!--proHtml += '<option value="'+re[i].id+'">'+re[i].class_industry+'</option>';-->
+                    <!--}-->
+                    <!--$('#industry2').html(proHtml);-->
+                    <!--form.render();-->
+
+                <!--},-->
+                <!--error:function(){-->
+                    <!--//失败执行的方法-->
+                    <!--alert("error");-->
+                <!--}-->
+            <!--})-->
+
+        <!--})-->
+    <!--})-->
+<!--</script>-->
+{include file="public/footer"/}

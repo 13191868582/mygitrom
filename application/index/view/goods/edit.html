@@ -1,0 +1,124 @@
+{include file="public/header"/}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">           
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>编辑商品</legend>
+</fieldset>
+ 
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品名称</label>
+    <div class="layui-input-block">
+      <input type="hidden" name="gid" value="{$good.id}">
+      <input type="text" name="goods_name" lay-verify="title" autocomplete="off" placeholder="请输入商品名称" class="layui-input" value="{$good.goods_name}">
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">豆币</label>
+    <div class="layui-input-inline">
+      <input type="text" name="price" lay-verify="title" autocomplete="off" placeholder="豆币" class="layui-input" value="{$good.price}">
+    </div>
+  </div>
+  <div class="layui-upload" style="margin-left:100px">
+  <button type="button" class="layui-btn" id="test2">上传商品图片</button>
+    <input type="hidden" name="goods_pic" id="goods_pic" value="{$good.goods_pic}">
+  <div class="layui-upload-list">
+    <img class="layui-upload-img" id="demo2">
+    <p id="demoText"></p>
+  </div>
+</div> 
+  <div class="layui-form-item layui-form-text">
+      <label class="layui-form-label">商品详情</label>
+      <div class="layui-input-block">
+          <textarea  name="content" style="width:800px;height:400px;visibility:hidden;" value="" class="layui-textarea">{$good.content}</textarea>
+      </div>
+      
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+       <button class="layui-btn btn" lay-submit="" name="getHtml" lay-filter="demos">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+
+    </div>
+  </div>
+<script src="../../../../editor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="../../editor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="../../editor/lang/zh-CN.js"></script>
+
+  <script type="text/javascript">
+      layui.use('upload', function(){
+      var $ = layui.jquery
+      ,upload = layui.upload;
+      //普通图片上传
+      var uploadInst = upload.render({
+        elem: '#test2'
+        ,url: "{:url('index/upload')}"
+        ,before: function(obj){
+          //预读本地文件示例，不支持ie8
+          obj.preview(function(index, file, result){
+            $('#demo2').attr('src', result); //图片链接（base64）
+          });
+        }
+        ,done: function(res){
+          //如果上传失败
+          if(res.code > 0){
+            return layer.msg('上传失败');
+          }
+          //上传成功
+          $("#goods_pic").val(res.url);
+        }
+        ,error: function(){
+          //演示失败状态，并实现重传
+          var demoText = $('#demoText1');
+          demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+          demoText.find('.demo-reload1').on('click', function(){
+            uploadInst.upload();
+          });
+        }
+      });
+      });
+  </script>
+   <script>
+   
+    var editor;
+    KindEditor.ready(function(K) {
+      editor = K.create('textarea[name="content"]', {
+          allowFileManager : true
+      });
+
+      K('.btn').click(function(e) {
+
+        var goods_name = $('input[name=goods_name]').val();
+        var price = $('input[name=price]').val();
+        var goods_pic = $('input[name=goods_pic]').val();
+        var gid = $('input[name=gid]').val(); 
+        var zcx = editor.html();
+        $.ajax({
+          url:"{:url('goods/doedit')}",
+          type:"POST",
+          dataType:"json",
+          data:{goods_name:goods_name,price:price,goods_pic:goods_pic,content:zcx,gid:gid},
+          success:function(data){ 
+             if(data.code==200){
+                layer.msg("修改成功！",{icon:1,time:1600},function(){
+                  window.location.href="{:url('goods/list')}";
+                });
+             }else{
+                 layer.msg(data.msg,{icon:2,time:1600});
+             }
+          },
+          error:function(jqXHR){
+             layer.msg("发生错误："+ jqXHR.status);
+          }
+        });
+      
+              
+      });
+    });
+
+  </script>
+
+{include file="public/footer"/}

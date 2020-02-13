@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+   <style type="text/css">
+     .layui-form-select dl{
+      max-height:100px;
+     }
+   </style>
+   <link rel="stylesheet" href="/backend/css/zTreeStyle.css">
+</head>
+<body class="layui-layout-body">
+<form class="layui-form" action="" method="post" id="custmers1">
+  <div class="layui-form-item">
+     <div class="layui-inline">
+      <label class="layui-form-label">执行人</label>
+      <div class="layui-input-inline">
+        <input type="hidden" name="oid" value="{$pid}">
+        <select name="user" lay-verify="required">
+        {volist name="users" id="user"}
+          <option value="{$user.id}">{$user.username}</option>
+        {/volist}
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">开始时间</label>
+      <div class="layui-input-inline">
+        <input type="text" name="date" id="date" lay-verify="datetime" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">结束时间</label>
+      <div class="layui-input-inline">
+        <input type="text" name="date1" id="date1" lay-verify="datetime" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">任务内容</label>
+    <div class="layui-input-block">
+      <textarea placeholder="请输入内容" name="content" class="layui-textarea"></textarea>
+    </div>
+  </div>
+   <button class="layui-btn" lay-submit="" id="searchBtn"  lay-filter="tranCustomer" data-type="getInfo" style="margin-left:120px;">分配</button>
+  </form>
+<script type="text/javascript" src="/backend/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="/backend/js/jquery.ztree.excheck.min.js"></script>
+  <script type="text/javascript">
+layui.use('form', function(){
+  var form = layui.form;
+  form.on('submit(tranCustomer)', function(data){
+    // layer.msg(JSON.stringify(data.field));
+    if(data.field.user==''){
+      layer.msg('请选择执行人');
+      return false;
+    }
+    if(data.field.date==''){
+      layer.msg('请选择开始时间');
+      return false;
+    }
+    if(data.field.date1==''){
+      layer.msg('请选择截止时间');
+      return false;
+    }
+    // console.log(data.field.user);
+  $.ajax({
+        url:"/index/Workorder/dowork",
+        type:"POST",
+        dataType:"json",
+        data:data.field,
+        success:function(data){ 
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+                 parent.location.reload();
+           });
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+  });
+  return false;
+});
+});
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  //日期
+  laydate.render({
+    elem: '#date',
+    type:'datetime'
+  });
+  laydate.render({
+    elem: '#date1',
+    type:'datetime'
+  });
+  //创建一个编辑器
+  // var editIndex = layedit.build('LAY_demo_editor');
+});
+</script>
+ </body>
+ </html>

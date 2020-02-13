@@ -1,0 +1,98 @@
+{include file="public/header"/}
+<style type="text/css">
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #dd1a20;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+    .a{
+        color: red;
+    }
+</style>
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>荣誉榜列表--经理名人堂</legend>
+        </fieldset>
+        <div class="layui-form">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" style="font-size: 18px"><a href="/index/Honors/lists">分公司奥斯卡</a></li>
+                    <li style="font-size: 18px"><a href="/index/Honors/ylists">员工名人堂</a></li>
+                    <li style="font-size: 18px"><a class="a" href="/index/Honors/jlists">经理名人堂</a></li>
+                    <li style="font-size: 18px"><a href="/index/Honors/wlists">王牌VS王牌</a></li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>分公司名称</th>
+                                <th>职级</th>
+                                <th>个人照片</th>
+                                <th>入选理由</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="jlists.data" id="vo"}
+                            <tr>
+                                <td>{$vo.w_name}</td>
+                                <td>{$vo.w_branch|branch}</td>
+                                <td>{$vo.w_rank}</td>
+                                <td><img src="{$vo.w_photo}" width="100%" alt=""></td>
+                                <td>{$vo.w_content}</td>
+                                <td>
+                                    {$vo.w_time|date="Y-m-d",###}
+                                </td>
+                                <td width="9%">
+                                    <a href="/index/Honors/editjlists?id={$vo.id}"><button type="button" class="layui-btn layui-btn-xs" >编辑</button></a>
+                                    <a  data-id="{$vo.id}" href="javascript:;" class="layui-btn layui-btn-danger layui-btn-xs status1">删除</a>
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                        {$jlists.page}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img alt="" style="display:none" id="displayimg" src=""/>
+        </body></div>
+</div>
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    $(".status1").click(function(e){
+        var id = $(e.target).attr("data-id");
+        $.post("{:url('Honors/deletejlists')}",{"id":id},function(data){
+            if(data.code==200){
+                layer.msg(data.msg,{icon:1});
+                setTimeout("window.location.reload()",1000);
+            }else{
+                layer.msg(data.msg,{icon:2});
+            }
+        },"json");
+    });
+</script>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date',
+        });
+        // laydate.render({
+        //   elem: '#date1'
+        // });
+    });
+</script>
+{include file="public/footer"/}

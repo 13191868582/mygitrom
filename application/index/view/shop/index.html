@@ -1,0 +1,141 @@
+{include file="public/header"/}
+<style type="text/css">
+	.pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+	.pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+	.pagination .active{background-color: #dd1a20;color: #fff;}
+	.pagination .disabled{color:#aaa;}
+</style>
+<div class="layui-body">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  		<legend>运营管理</legend>
+	</fieldset>
+	<div class="layui-form">
+		<a href="{:url('index/shop/doadd')}" class="layui-btn layui-btn-lg layui-btn-normal" style="margin-left: 65%;">添加店铺</a>
+		<a href="{:url('index/shop/expire')}" class="layui-btn layui-btn-lg layui-btn-normal">过期店铺</a>
+		<a href="{:url('index/shop/index')}" class="layui-btn layui-btn-lg layui-btn-normal">未过期店铺</a>
+	</div>
+	<div class="layui-form">
+		  <table class="layui-table">
+		    <colgroup>
+		        <col width="150">
+		        <col width="150">
+		        <col width="200">
+		        <col width="200">
+		    </colgroup>
+		    <thead>
+		        <tr>
+			        <th>网店会员id</th>
+			        <th>公司名称</th>
+			        <th>联系方式</th>
+			        <th>操作</th>
+		        </tr> 
+		    </thead>
+		    <tbody>
+		    	{foreach name="result" item="res"}
+		      	<tr>
+		        	<td>{$res['shop_id']}</td>
+		        	<td>{$res['corporate_name']}</td>
+		        	<td>{$res['username']}({$res['phone']})</td>
+		        	<td>
+		        		<div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+							{if condition="$status == 0"}
+		        			<button data-method="notice" class="layui-btn" value="{$res['id']}">录入信息</button>
+							{else /}
+							<button data-method="notice" style="background: #4e5465" class="layui-btn" value="{$res['id']}" disabled="disabled">录入信息</button>
+							{/if}
+							<a href="{:url('index/shop/edit')}?id={$res['id']}" class="layui-btn">修改</a>
+		        		</div>
+		        	</td>
+		        </tr>
+		        {/foreach}
+		    </tbody>
+
+		</table>
+		<span style="font-size: 25px;">共{$count}条</span>
+		{$result->render()}
+	</div>
+</div>
+<script>
+layui.use('layer', function(){ //独立版的layer无需执行这一句
+  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  
+  //触发事件
+  var active = {
+    setTop: function(){
+      var that = this; 
+      //多窗口模式，层叠置顶
+      layer.open({
+        type: 2 //此处以iframe举例
+        ,title: '当你选择该窗体时，即会在最顶端'
+        ,area: ['390px', '260px']
+        ,shade: 0
+        ,maxmin: true
+        ,offset: [ //为了演示，随机坐标
+          Math.random()*($(window).height()-300)
+          ,Math.random()*($(window).width()-390)
+        ] 
+        ,content: '//layer.layui.com/test/settop.html'
+        ,btn: ['继续弹出', '全部关闭'] //只是为了演示
+        ,yes: function(){
+          $(that).click(); 
+        }
+        
+      });
+    }
+    
+    ,notice: function(){
+      var id = $(this).val();
+      $.ajax({
+      	url: '{:url("index/shop/date")}',
+      	type: 'POST',
+      	dataType: 'json',
+      	data: {id:id},
+      	success:function(res){
+      		var str = "";
+      		str += '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">';
+      		str += "<span>店铺会员ID:</span><span>"+res.shop_id+"</span><br>";
+      		str += "<span>密码:</span><span>"+res.password+"</span><br>";
+      		str += "<span>公司名称:</span><span>"+res.corporate_name+"</span><br>";
+      		str += "<span>联系方式:</span><span>"+res.phone+"</span><br>";
+      		str += "<span>联系人:</span><span>"+res.username+"</span><br>";
+      		str += "<span>合作方式:</span><span>"+res.cooperation_mode+"</span><br>";
+      		str += "<span>合作时间:</span><span>"+res.cooperation_time+"</span><br>";
+
+      		layer.open({
+		        type: 1
+		        ,title: false //不显示标题栏
+		        ,closeBtn: false
+		        ,area: '300px;'
+		        ,shade: 0.8
+		        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+		        ,btn: ['下一步']
+		        ,btnAlign: 'c'
+		        ,moveType: 1 //拖拽模式，0或者1
+		        ,content: str
+		        ,success: function(layero){
+		          var btn = layero.find('.layui-layer-btn');
+		          btn.find('.layui-layer-btn0').attr({
+		            href: '{:url("Index/shop/orderall")}?id='+ id
+		            ,target: '_parent'
+		          });
+		        }
+		      });
+      	}
+      })
+      
+      
+
+      
+    }
+    
+  };
+  
+  $('#layerDemo .layui-btn').on('click', function(){
+    var othis = $(this), method = othis.data('method');
+    active[method] ? active[method].call(this, othis) : '';
+  });
+  
+});
+</script>
+
+{include file="public/footer"/}

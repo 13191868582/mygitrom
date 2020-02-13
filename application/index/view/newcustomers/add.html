@@ -1,0 +1,220 @@
+{include file="public/header"/}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>新增新签客户</legend>
+        </fieldset>
+
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系人姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="c_username" lay-verify="required" autocomplete="off" placeholder="请输入联系人姓名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="c_tel" lay-verify="phone" lay-reqtext="" placeholder="请输入电话" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">座机号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="c_tele" onkeyup="value=value.replace(/[^\d\-\d]/g,'')"
+                           maxlength=20 placeholder="请输入座机号(例如8888-88888)" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">职级</label>
+                    <div class="layui-input-inline">
+                        <select name="c_position" lay-verify="required" lay-search="">
+                            <option value="">请选择</option>
+                            <option value="1">总经理</option>
+                            <option value="2">KP</option>
+                            <option value="3">电商负责人</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公司名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="c_company" lay-verify="required" autocomplete="off" placeholder="请输入公司名称" class="layui-input">
+                </div>
+            </div>
+            <!--<div class="layui-form-item">
+                <label class="layui-form-label">公司地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="c_address" lay-verify="required" autocomplete="off" placeholder="请输入公司地址" class="layui-input">
+                </div>
+            </div>
+             -->
+            <!--三级联动-->
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请选择地区</label>
+                    <div class="layui-inline">
+                        <select name="province" id="province" lay-verify="required" lay-search lay-filter="province">
+                            <option value="">省份</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <select name="city" id="city" lay-verify="required" lay-search lay-filter="city">
+                            <option value="">地级市</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <select name="district" id="district" lay-verify="required" lay-search>
+                            <option value="">县/区</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="c_address" lay-verify="required" autocomplete="off" placeholder="请输入公司地址" class="layui-input"style="width:379px;">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                <label class="layui-form-label">主营产品</label>
+                <div class="layui-input-block">
+                    <input type="text" name="c_industry" lay-verify="required" autocomplete="off" placeholder="请输入主营产品" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">营业执照注册时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="c_registration" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">意向度</label>
+                    <div class="layui-input-inline">
+                        <select name="c_intentionality" lay-verify="required"  >
+                            <option value="">请选择</option>
+                            <option value="1">A</option>
+                            <option value="2">B</option>
+                            <option value="3">C</option>
+                            <option value="4">D</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">跟进方式</label>
+                    <div class="layui-input-inline">
+                        <select name="c_way" lay-verify="required" lay-search="">
+                            <option value="">请选择</option>
+                            <option value="1">上门</option>
+                            <option value="2">电话</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">所属类型</label>
+                    <div class="layui-input-inline">
+                        <select name="c_type" lay-verify="required" lay-filter="c_type" lay-search="">
+                            <option value="1">内部</option>
+                            <option value="2">其他公司</option>
+                        </select>
+                        <div style="display: none;float:left" id="mmp">
+                            <select style="display: none;" name="c_type1" lay-filter="c_type1" id="c_type1" lay-verify="required" lay-search="">
+                                
+                            </select>
+                        </div>
+                         <div style="float: left"><input style="display: none;" type="text" name="bh_time" id="date1"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">小记</label>
+                <div class="layui-input-block">
+                    <textarea  name="c_note" value="" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="de">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/js/area.js" type="text/javascript"></script>
+<script src="/static/js/select.js" type="text/javascript"></script>
+<script type="text/javascript">
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('select(c_type)',function(data){
+            var fid=data.value;
+            var proHtml = '';
+            if(fid==1){
+                proHtml += '<option value="1">转介绍</option>';
+                proHtml += '<option value="2">公海挑入</option>';
+                proHtml += '<option value="3">纯新录入</option>';
+                $('#mmp').show();
+                $('#date1').css('display','none');
+                $('#c_type1').html(proHtml); 
+            }else{
+                $('#date1').css('display','block');
+                $('#mmp').css('display','none');
+            }
+           
+            form.render();
+        })
+    })
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(de)', function(data){
+            $.ajax({
+                url:"{:url('newcustomers/add_do')}",
+                type:"POST",
+                dataType:"json",
+                data:data.field,
+                success:function(data){
+                    if(data.code==200){
+                        layer.msg("添加成功！",{icon:1,time:1600},function(){
+                            window.location.href="{:url('newcustomers/lists')}";
+                        });
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:1600});
+                    }
+                },
+                error:function(jqXHR){
+                    layer.msg("发生错误："+ jqXHR.status);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  //日期
+  laydate.render({
+    elem: '#date',
+    // value:new Date()
+  });
+   laydate.render({
+    elem: '#date1',
+    // value:new Date()
+  });
+});
+</script>
+{include file="public/footer"/}

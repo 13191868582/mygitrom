@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>银豆豆任务目标系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        .layui-table td, .layui-table th {
+            position: relative;
+            padding: 10px 0px;
+            min-height: 20px;
+            line-height: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1 style="text-align:center;margin-top:10px;color:red;font-weight:800;letter-spacing:5px">银豆豆任务目标系统 </h1>
+    <div id="time" style="float:left;color: black;font-weight:bold;font-size:18px"></div>
+    <div style="float: right;color: black;font-weight:bold;font-size:18px">更新时间:{:date('Y-m-d H:i:s',$newtime['time'])}</div style="float:right;color:blac;font-weight:bold;font-size:18px">
+    <table class="layui-table">
+        <thead>
+        <tr style="text-align:center;color: black;font-weight:bold" >
+            <td colspan="3" rowspan="2"  >分公司名称</td>
+            <td colspan="2">新签(本月)</td>
+            <td colspan="2">新签(季度)</td>
+            <td colspan="2">续签(本月)</td>
+            <td colspan="2">续签(季度)</td>
+            <td colspan="2">网销宝(本月)</td>
+            <td colspan="2">网销宝(季度)</td>
+            <td colspan="2">代运营(本月)</td>
+            <td colspan="2">代运营(季度)</td>
+        </tr>
+        <tr style="text-align:center;color: black;font-weight:bold">
+            <td>到账(单)</td>
+            <td>目标(单)</td>
+            <td>到账(单)</td>
+            <td>目标(单)</td>
+            <td>到账(单)</td>
+            <td>目标(单)</td>
+            <td>到账(单)</td>
+            <td>目标(单)</td>
+            <td>到账(单)</td>
+            <td>目标(单)</td>
+            <td>到账(单)</td>
+            <td>目标(单)</td>
+            <td>到账(万元)</td>
+            <td>目标(万元)</td>
+            <td>到账(万元)</td>
+            <td>目标(万元)</td>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        {volist name="data" id="vo"}
+        <tr style="text-align:center;color: black;font-weight:bold">
+            <td colspan="3">{$vo.name}</td>
+            <td>{$vo.newover}</td>
+            <td>{$vo.new}</td>
+            <td>{$vo.mnewover}</td>
+            <td>{$vo.mnew}</td>
+            <td>{$vo.xuqianover}</td>
+            <td>{$vo.xuqian}</td>
+            <td>{$vo.mxuqianover}</td>
+            <td>{$vo.mxuqian}</td>
+            <td>{$vo.wangxiaobaoover}</td>
+            <td>{$vo.wangxiaobao}</td>
+            <td>{$vo.mwangxiaobaoover}</td>
+            <td>{$vo.mwangxiaobao}</td>
+            <td>{$vo.daiyunyingover}</td>
+            <td>{$vo.daiyunying}</td>
+            <td>{$vo.mdaiyunyingover}</td>
+            <td>{$vo.mdaiyunying}</td>
+        </tr>
+        {/volist}
+        <tr style="text-align:center;color: black;font-weight:bold">
+            <td colspan="3">合计</td>
+            <td>{$newovernum}</td>
+            <td>{$new}</td>
+            <td>{$mnewovernum}</td>
+            <td>{$mnewnum}</td>
+            <td>{$xuqianovernum}</td>
+            <td>{$xuqian}</td>
+            <td>{$mxuqianovernum}</td>
+            <td>{$mxuqiannum}</td>
+            <td>{$wangxiaobaoovernum}</td>
+            <td>{$wangxiaobao}</td>
+            <td>{$mwangxiaobaoovernum}</td>
+            <td>{$mwangxiaobaonum}</td>
+            <td>{$daiyunyingovernum}</td>
+            <td>{$daiyunying}</td>
+            <td>{$mdaiyunyingovernum}</td>
+            <td>{$mdaiyunyingnum}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        //odd：匹配所有索引值为奇数的元素，从0开始计数
+        //even：匹配所有索引值为偶数的元素，从0开始计数
+        $("#tbody tr:even").css("background-color", "#fff"); //为双数行表格设置背颜色素
+        $("#tbody tr:odd").css("background-color", "#f3f4f8"); //为单数行表格设置背颜色素
+
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var newsum=$('#new').text();
+        console.log(newsum);
+    });
+
+
+</script>
+<script>setTimeout("location=location",60*1000); </script>
+<script type="text/javascript">
+    function time(){
+        var date =  new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        hours = date.getHours();
+        minutes = date.getMinutes();
+        seconds = date.getSeconds();
+        month=month<10?"0"+month:month;
+        day=day<10?"0"+day:day;
+        hours=hours<10?"0"+hours:hours;
+        minutes=minutes<10?"0"+minutes:minutes;
+        seconds=seconds<10?"0"+seconds:seconds;
+        vWeek_s = date.getDay();
+        document.getElementById("time").innerHTML = '当前时间:'+year + "-" + month + "-" + day + "" + "\t" + hours + ":" + minutes +":" + seconds
+    };
+    setInterval("time()",1000);
+
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>河北银豆豆crm系统</title>
+   {load href="/static/layui/css/layui.css"/}
+   {load href="/static/layui/layui.js"/}
+   {load href="/static/jquery-3.3.1.min.js"/}
+</head>
+<body>
+     <form class="layui-form" action="">
+            <input type="hidden" name="pid1" value="{$data[0]['id']}">
+            <input type="hidden" name="pid2" value="{$data[1]['id']}">
+            <div class="layui-form-item">
+            <label class="layui-form-label" style="color:red">1、判断题</label>
+            <div style="padding-left:20px">{$data[0]['title']}
+            </div>
+            <div class="layui-form-item">
+            <div class="layui-input-block">
+            {foreach $data[0]['options'] as $k=>$v}
+            <input type="radio" name="problem1" value="{$k}" title="{$v}">
+            {/foreach}
+            </div>
+            </div>
+            </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label" style="color:red">2、单选题</label>
+            <div style="padding-left:20px">{$data[1]['title']}
+            </div>
+            <div class="layui-form-item">
+            <div class="layui-input-block">
+            {foreach $data[1]['options'] as $k=>$v}
+            <input type="radio" name="problem2" value="{$k}" title="{$v}">
+            {/foreach}
+            </div>
+            </div>
+            </div>
+            <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left:350px">
+            <button class="layui-btn"  lay-submit="" lay-filter="fenpei">确认提交</button>
+            </div>
+            </div>
+        </form>
+ </body>
+ <script type="text/javascript">
+    var pindex = parent.layer.getFrameIndex(window.name);
+   layui.use('form', function(){
+            var form = layui.form;
+            form.on('checkbox()', function(data){
+                console.log(data.value);
+            });  
+          form.on('submit(fenpei)',function(data){
+                $.ajax({
+                    url:'{:url("index/problemed")}',
+                    type:"POST",
+                    dataType:"json",
+                    data:data.field,
+                    success:function(data){
+                        if(data.code==200){
+                            layer.msg(data.msg,{icon:1,time:2600},function(){
+                                parent.layer.close(pindex);
+                                window.location.href='/';
+                            });
+                        }else if(data.code==300){
+                            layer.msg(data.msg,{icon:2,time:3600},function(){
+                                // window.location.href='/';
+                            });
+                        }else{
+                            layer.msg(data.msg,{icon:2,time:1600});
+                        }
+                    },
+                    error:function(jqXHR){
+                        layer.msg("发生错误："+ jqXHR.status);
+                    }
+                });
+                return false;
+            });
+   })
+ </script>
+ </html>

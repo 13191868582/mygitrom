@@ -1,0 +1,112 @@
+{include file="public/header"/}
+ <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">           
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>服务列表</legend>
+</fieldset>
+<form class="layui-form" action="">
+	<input type="hidden" name="cid" value="{$cid}">
+  <input type="hidden" name="service_month" value="{$res1[0]['service_month']}">
+  <div class="layui-form-item" id="filter">
+    <label class="layui-form-label">规定服务</label>
+    
+    	{volist name="res1" id="list1"}
+      <div class="layui-input-block">
+      <input type="checkbox"  {if condition="service_complete1($cid,$times,$list1['id'],$Think.session.user.id)"} checked{/if} name="{$list1.id}" title="{$list1.name}">
+       </div>
+      <!-- <input type="checkbox" name="{$list1.id}" lay-skin="primary" title="{$list1.name}" checked=""> -->
+      {/volist}
+   
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">可选服务</label>
+    <div class="layui-input-block">
+    	{volist name="res2" id="list2"}
+      <input type="checkbox" {if condition="service_complete2($cid,$times,$list2['id'])"} checked{/if} name="{$list2.id}" title="{$list2.name}">
+       {/volist}
+    </div>
+  </div>
+ 
+ <!--  <div class="layui-form-item" pane="">
+    <label class="layui-form-label">原始复选框</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="like1[write]" lay-skin="primary" title="写作" checked="">
+      <input type="checkbox" name="like1[read]" lay-skin="primary" title="阅读">
+      <input type="checkbox" name="like1[game]" lay-skin="primary" title="游戏" disabled="">
+    </div>
+  </div> -->
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit="" lay-filter="service_cum">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+<script type="text/javascript">
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+  
+});
+layui.use('form', function(){
+  var form = layui.form;
+  //监听提交
+  form.on('checkbox()', function(data){
+  // console.log(data.elem); //得到checkbox原始DOM对象
+  // console.log(data.elem.checked); //是否被选中，true或者false
+  // console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+  // console.log(data.elem.name); //得到美化后的DOM对象
+  if(data.elem.checked){
+    layer.confirm('您是否确认完成此项服务，点击确认后您的主管会抽查此项服务是否真实完成！', {
+    title:'<span style="padding-left:48%;font-size:20px;color:red">服务确认</span>',
+    btn: ['确认','取消'] //按钮
+    ,cancel: function(index, layero){
+      //取消操作，点击右上角的X
+    }
+  }, function(index){
+    layer.close(index);
+  }, function(index){
+    $(data.elem).prop("checked", false);
+    form.render();
+    layer.close(index);
+  });
+    }
+});       
+  form.on('submit(service_cum)', function(data){
+    //layer.msg(JSON.stringify(data.field));
+  $.ajax({
+        url:"{:url('services/doservice')}",
+        type:"POST",
+        dataType:"json",
+		    data:data.field,
+        success:function(data){	
+           if(data.code==200){
+               layer.msg(data.msg,{icon:1,time:1600},function(){
+			         window.location.href="{:url('Customers/index')}";
+		});
+           }else{
+               layer.msg(data.msg,{icon:2,time:1600});
+           }
+        },
+        error:function(jqXHR){
+          layer.msg("发生错误："+ jqXHR.status);
+        }
+});
+  return false;
+});
+});
+
+ 
+function checkboxOnclick(checkbox){
+ 
+if (checkbox.checked == true){
+ 
+ alert('123');
+}else{
+
+}
+ 
+}
+</script>
+{include file="public/footer"/}
